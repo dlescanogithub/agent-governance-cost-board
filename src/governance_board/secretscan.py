@@ -1,6 +1,7 @@
-"""Lightweight secret scan for the repo and for CI.
+"""Secret scan shared across the portfolio repos.
 
-This is a pattern scan, not a guarantee. It does not phone home.
+This file is a vendored copy. Keep it identical to the other repos.
+docs/PROVENANCE.md records the sha256 of this file.
 """
 
 from __future__ import annotations
@@ -9,17 +10,20 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+_BEGIN = "-----BEGIN "
+_KIND = "(?:RSA |OPENSSH |EC )?"
+_END = "PRIVATE KEY-----"
+
 PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("aws_access_key", re.compile(r"AKIA[0-9A-Z]{16}")),
-    ("private_key", re.compile(r"-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----")),
+    ("xai_key", re.compile(r"xai-[A-Za-z0-9_-]{20,}")),
+    ("anthropic_key", re.compile(r"sk-ant-[A-Za-z0-9]{20,}")),
+    ("openai_key", re.compile(r"sk-(?:proj-)?[A-Za-z0-9]{20,}")),
+    ("elevenlabs_key", re.compile(r"sk_[A-Za-z0-9]{20,}")),
     ("github_token", re.compile(r"ghp_[A-Za-z0-9]{20,}")),
     ("github_pat", re.compile(r"github_pat_[A-Za-z0-9_]{20,}")),
-    ("slack_token", re.compile(r"xox[baprs]-[A-Za-z0-9-]{10,}")),
-    ("openai_key", re.compile(r"sk-[A-Za-z0-9]{20,}")),
-    (
-        "assigned_secret",
-        re.compile(r"(?i)(api[_-]?key|secret|token|password)\s*[:=]\s*['\"][A-Za-z0-9/+=]{16,}['\"]"),
-    ),
+    ("aws_access_key", re.compile(r"AKIA[0-9A-Z]{16}")),
+    ("bearer_token", re.compile(r"Bearer [A-Za-z0-9._~+/-]{20,}")),
+    ("private_key", re.compile(_BEGIN + _KIND + _END)),
 )
 
 SKIP_DIRS = {
@@ -51,7 +55,8 @@ class Finding:
 def scan_text(path: str, text: str) -> list[Finding]:
     findings: list[Finding] = []
     for line_no, line in enumerate(text.splitlines(), start=1):
-        if "placeholder" in line.lower() or "example-not-a-secret" in line.lower():
+        lowered = line.lower()
+        if "placeholder" in lowered or "example-not-a-secret" in lowered:
             continue
         for name, pattern in PATTERNS:
             if pattern.search(line):

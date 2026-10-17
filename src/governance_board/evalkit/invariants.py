@@ -49,6 +49,21 @@ def check_event(event: TraceEvent, *, per_run_cap_micro_usd: int) -> list[Invari
     return breaches
 
 
+def check_kill_switch(event: TraceEvent, *, kill_switch: str) -> list[InvariantBreach]:
+    """Engaged kill switch: the run must not succeed and must not carry effects."""
+    if kill_switch != "engaged":
+        return []
+    if event.effects or event.status == "ok":
+        return [
+            InvariantBreach(
+                "kill_switch_blocks",
+                event.run_id,
+                "kill switch is engaged; the run must not succeed or carry effects",
+            )
+        ]
+    return []
+
+
 def check_events(
     events: tuple[TraceEvent, ...],
     *,

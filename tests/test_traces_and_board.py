@@ -19,7 +19,6 @@ from governance_board.trace import (
     TraceError,
     dump_jsonl,
     iter_events,
-    load_jsonl,
     loads_jsonl,
     parse_event,
 )
@@ -28,13 +27,25 @@ ROOT = Path(".")
 
 
 def test_alternate_trace_shape() -> None:
-    events = load_jsonl(ROOT / "traces" / "runtime_evals_sample.jsonl")
-    assert events[0].run_id == "alt-1"
-    assert events[0].status == "ok"
-    assert events[0].tokens_in == 80
-    roundtrip = loads_jsonl(dump_jsonl(events))
+    raw = {
+        "trace_id": "alt-1",
+        "agent": "kb-search",
+        "agent_version": "1.1.0",
+        "timestamp": "2026-10-10T12:00:00Z",
+        "outcome": "success",
+        "usage": {"prompt_tokens": 80, "completion_tokens": 20},
+        "cost": {"micro_usd": 900},
+        "elapsed_ms": 300,
+        "human_approval": "none",
+        "tool_effects": ["retrieve_kb_passage"],
+    }
+    event = parse_event(raw)
+    assert event.run_id == "alt-1"
+    assert event.status == "ok"
+    assert event.tokens_in == 80
+    roundtrip = loads_jsonl(dump_jsonl((event,)))
     assert roundtrip[0].cost_micro_usd == 900
-    assert list(iter_events(ROOT / "traces" / "runtime_evals_sample.jsonl"))[0].agent_id == "kb-search"
+    assert list(iter_events(ROOT / "traces" / "fleet.jsonl"))[0].agent_id
 
 
 def test_trace_errors() -> None:
@@ -112,6 +123,7 @@ def test_trace_errors() -> None:
 
 
 def test_generator_is_deterministic_and_safe() -> None:
+    """The spike is planted in generation.yaml. These asserts lock the mechanism."""
     inv = load_inventory(ROOT / "inventory" / "fleet.yaml")
     profile = load_profile(ROOT / "traces" / "generation.yaml")
     first, meta = generate(inv, profile)
@@ -219,15 +231,24 @@ def test_report_is_local(tmp_path: Path) -> None:
     inv = load_inventory(ROOT / "inventory" / "fleet.yaml")
     events, meta = generate(inv, load_profile(ROOT / "traces" / "generation.yaml"))
     board = aggregate(inv, events)
-    html = render_html(board, generated_on="2026-10-17")
+    html = render_html(board, generated_on="2026-10-17", source="simulated-generator")
     assert "https://" not in html
     assert "http://" not in html
     assert "<script src" not in html
-    assert "Simulated data" in html
-    markdown = render_markdown(board, generated_on="2026-10-17")
+    assert "SIMULATED / illustrative example" in html
+    assert "not a measurement" in html
+    assert "Source: simulated generator" in html
+    markdown = render_markdown(board, generated_on="2026-10-17", source="simulated-generator")
     assert "refund-advisor" in markdown
-    assert "simulated" in markdown
-    write_report(board, tmp_path, generated_on="2026-10-17", extra={"meta": meta.to_dict()})
+    assert "illustrative example" in markdown
+    assert "planted" in markdown
+    write_report(
+        board,
+        tmp_path,
+        generated_on="2026-10-17",
+        source="simulated-generator",
+        extra={"meta": meta.to_dict()},
+    )
     assert (tmp_path / "index.html").exists()
     assert (tmp_path / "summary.json").exists()
     breaches = check_events(events[:3], caps={}, default_cap=10**12)

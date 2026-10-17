@@ -7,6 +7,24 @@ import json
 from pathlib import Path
 
 from governance_board.aggregate import Alert, Board
+from governance_board.ingest import SOURCE_GENERATED, SOURCE_INGESTED
+
+
+def source_banner(source: str) -> str:
+    if source == SOURCE_GENERATED:
+        return (
+            "SIMULATED / illustrative example. Source: simulated generator. "
+            "A spike is planted in traces/generation.yaml so a cap alert can be shown. "
+            "This page demonstrates policy-as-code, budget caps, the kill switch, and prompt rollback. "
+            "It is not a measurement."
+        )
+    if source == SOURCE_INGESTED:
+        return (
+            "Source: ingested runtime-evals JSONL. "
+            "Figures are the rows in that file. A hand-written sample is still a sample, not a measurement. "
+            "This page demonstrates the same board on an ingested file."
+        )
+    raise ValueError(f"unknown source {source}")
 
 
 def _esc(value: object) -> str:
@@ -31,12 +49,13 @@ def _pct(value: float | None) -> str:
     return f"{value * 100:.1f}%"
 
 
-def render_markdown(board: Board, *, generated_on: str, label: str = "simulated") -> str:
+def render_markdown(board: Board, *, generated_on: str, source: str) -> str:
     lines = [
         f"# Cost and governance board — {board.organization}",
         "",
-        f"Label: **{label}**. Generated on {generated_on}. "
-        "Costs use the simulated rate card in `traces/generation.yaml` (not a vendor price).",
+        f"Date label: {generated_on}.",
+        "",
+        source_banner(source),
         "",
         f"Alerts: **{len(board.alerts)}**.",
         "",
@@ -64,7 +83,11 @@ def render_markdown(board: Board, *, generated_on: str, label: str = "simulated"
     else:
         for alert in board.alerts:
             lines.append(f"- `{alert.code}` **{alert.agent_id}**: {alert.message}")
-    lines.extend(["", "## Daily fleet cost (simulated)", ""])
+    if source == SOURCE_GENERATED:
+        cost_heading = "Daily fleet cost (simulated illustrative example)"
+    else:
+        cost_heading = "Daily fleet cost (ingested file)"
+    lines.extend(["", f"## {cost_heading}", ""])
     lines.append("| Day | Cost |")
     lines.append("| --- | ---: |")
     for day, cost in board.daily_cost_micro_usd.items():
@@ -100,7 +123,7 @@ def _bar_chart(title: str, rows: list[tuple[str, float]], unit: str) -> str:
     return "\n".join(parts)
 
 
-def render_html(board: Board, *, generated_on: str) -> str:
+def render_html(board: Board, *, generated_on: str, source: str) -> str:
     alert_rows = (
         "".join(
             f"<li><code>{_esc(alert.code)}</code> <strong>{_esc(alert.agent_id)}</strong> — {_esc(alert.message)}</li>"
@@ -149,9 +172,10 @@ code {{ font-family: ui-monospace, monospace; }}
 </head>
 <body>
 <h1>Governance and cost board</h1>
-<p>{_esc(board.organization)} · generated {_esc(generated_on)}</p>
-<p class="banner">Simulated data. This page is a static report.
-It is not a certification, not legal advice, and it does not claim NIST or EU AI Act compliance.</p>
+<p>{_esc(board.organization)} · {_esc(generated_on)}</p>
+<p class="banner">{_esc(source_banner(source))}
+This page is a static report. It is not a certification, not legal advice,
+and it does not claim NIST or EU AI Act compliance.</p>
 <h2>Alerts ({len(board.alerts)})</h2>
 <ul>
 {alert_rows}
@@ -168,9 +192,9 @@ It is not a certification, not legal advice, and it does not claim NIST or EU AI
 </tbody>
 </table>
 <h2>Charts</h2>
-{_bar_chart("Mean cost per run (micro-USD, simulated)", cost_bars, "µUSD")}
-{_bar_chart("Latency p95 (ms, simulated)", latency_bars, "ms")}
-{_bar_chart("Fleet cost by day (micro-USD, simulated)", daily_bars, "µUSD")}
+{_bar_chart("Mean cost per run (micro-USD)", cost_bars, "µUSD")}
+{_bar_chart("Latency p95 (ms)", latency_bars, "ms")}
+{_bar_chart("Fleet cost by day (micro-USD)", daily_bars, "µUSD")}
 </body>
 </html>
 """
@@ -181,16 +205,21 @@ def write_report(
     out_dir: Path,
     *,
     generated_on: str,
+    source: str,
     extra: dict[str, object] | None = None,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "report.md").write_text(
-        render_markdown(board, generated_on=generated_on),
+        render_markdown(board, generated_on=generated_on, source=source),
         encoding="utf-8",
     )
-    (out_dir / "index.html").write_text(render_html(board, generated_on=generated_on), encoding="utf-8")
+    (out_dir / "index.html").write_text(
+        render_html(board, generated_on=generated_on, source=source),
+        encoding="utf-8",
+    )
     summary: dict[str, object] = {
-        "label": "simulated",
+        "source": source,
+        "illustrative": source == SOURCE_GENERATED,
         "generated_on": generated_on,
         "organization": board.organization,
         "alert_count": len(board.alerts),

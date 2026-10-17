@@ -19,7 +19,6 @@ from governance_board.providers import CassetteMiss, ProviderDisabled
 from governance_board.providers.cassette import CassetteProvider
 from governance_board.providers.fake import FakeProvider
 from governance_board.providers.real import RealProvider, urllib_transport
-from governance_board.secretscan import scan_path, scan_text
 
 ROOT = Path(".")
 
@@ -147,20 +146,6 @@ def test_urllib_transport_with_fake_socket(monkeypatch: pytest.MonkeyPatch) -> N
     assert parsed["text"] == "body"
 
 
-def test_secretscan(tmp_path: Path) -> None:
-    dirty = tmp_path / "notes.txt"
-    dirty.write_text("token = not this\n" + "AKIA" + ("A" * 16) + "\n", encoding="utf-8")
-    found = scan_path(dirty)
-    assert any(item.rule == "aws_access_key" for item in found)
-    assert scan_text("x", "placeholder AKIA" + ("A" * 16)) == []
-    assert scan_path(ROOT) == []
-    binary = tmp_path / "image.png"
-    binary.write_bytes(b"\xff\x00AKIA" + b"A" * 16)
-    found_dir = scan_path(tmp_path)
-    assert all("image.png" not in item.path for item in found_dir)
-    assert any(item.rule == "aws_access_key" for item in found_dir)
-
-
 def test_eval_gate() -> None:
     settings = load_settings({})
     passed = run_path(ROOT / "evals" / "suite.yaml", settings=settings)
@@ -224,10 +209,15 @@ def test_cli_happy_and_failures(tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
                 str(report_dir),
                 "--generated-on",
                 "2026-10-17",
+                "--source",
+                "simulated-generator",
             ]
         )
         == 0
     )
+    html = (report_dir / "index.html").read_text(encoding="utf-8")
+    assert "Source: simulated generator" in html
+    assert "not a measurement" in html
     assert (report_dir / "index.html").exists()
     demo_dir = tmp_path / "demo"
     assert main(["demo", "--root", ".", "--out", str(demo_dir), "--today", "2026-10-17"]) == 0

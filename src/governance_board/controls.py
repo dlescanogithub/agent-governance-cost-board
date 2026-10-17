@@ -18,6 +18,13 @@ class ControlError(ValueError):
     pass
 
 
+def kill_switch_blocks(kill_switch: str) -> bool:
+    """An engaged kill switch blocks the run. The other fields do not matter."""
+    if kill_switch not in {"engaged", "disengaged"}:
+        raise ControlError(f"unknown kill_switch {kill_switch!r}")
+    return kill_switch == "engaged"
+
+
 def load_yaml_mapping(path: Path) -> dict[str, Any]:
     loaded = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(loaded, dict):

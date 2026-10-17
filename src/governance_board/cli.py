@@ -22,8 +22,10 @@ from governance_board.controls import (
     rollback_agent,
     write_mapping,
 )
+from governance_board.evalkit.properties import PROPERTY_SEED, PROPERTY_TRIALS, run_property_checks
 from governance_board.evalkit.runner import EvalError, run_path
 from governance_board.generate import ProfileError, generate, load_profile
+from governance_board.ingest import SOURCE_GENERATED, SOURCE_INGESTED, load_runtime_evals
 from governance_board.inventory import InventorySchemaError, load_inventory
 from governance_board.logging_setup import log_event, setup_logging
 from governance_board.policy import PolicyReport, Violation, check_policy, render_text
@@ -99,18 +101,30 @@ def _load_meta(traces: Path) -> dict[str, object]:
     return {}
 
 
+def _default_ts(day: str) -> datetime:
+    parsed = datetime.strptime(day, "%Y-%m-%d")
+    return parsed.replace(hour=12)
+
+
 def cmd_report(args: argparse.Namespace, settings: Settings) -> int:
     del settings
     inventory = load_inventory(Path(args.inventory))
-    events = load_jsonl(Path(args.traces))
+    traces = Path(args.traces)
+    if args.source == SOURCE_INGESTED:
+        events = load_runtime_evals(traces, default_ts=_default_ts(args.generated_on))
+    elif args.source == SOURCE_GENERATED:
+        events = load_jsonl(traces)
+    else:
+        raise ConfigError(f"unknown --source {args.source}")
     board = aggregate(inventory, events)
     extra = {
         "trace_file": args.traces,
         "event_count": len(events),
-        "meta": _load_meta(Path(args.traces)),
+        "meta": _load_meta(traces),
+        "source": args.source,
         "command": "python -m governance_board report",
     }
-    write_report(board, Path(args.out), generated_on=args.generated_on, extra=extra)
+    write_report(board, Path(args.out), generated_on=args.generated_on, source=args.source, extra=extra)
     log_event(
         LOGGER,
         logging.INFO,
@@ -148,38 +162,50 @@ def cmd_demo(args: argparse.Namespace, settings: Settings) -> int:
         board,
         out,
         generated_on=today.isoformat(),
-        extra={"label": "simulated", "meta": meta.to_dict(), "event_count": meta.event_count},
+        source=SOURCE_GENERATED,
+        extra={
+            "source": SOURCE_GENERATED,
+            "illustrative": True,
+            "meta": meta.to_dict(),
+            "event_count": meta.event_count,
+        },
     )
     print(f"policy: PASS ({len(inventory.agents)} agents)")
     print(f"wrote {out / 'index.html'} ({meta.event_count} simulated events, {len(board.alerts)} alerts)")
     return 0
 
 
-def _run_eval(path: Path, settings: Settings) -> int:
+def _run_eval(path: Path, settings: Settings, *, properties: bool) -> int:
+    property_failures: list[str] = run_property_checks() if properties else []
     result = run_path(path, settings=settings)
+    ok = result.ok and not property_failures
     payload = {
-        "ok": result.ok,
+        "ok": ok,
         "cases": result.case_count,
+        "property_seed": PROPERTY_SEED if properties else None,
+        "property_trials": PROPERTY_TRIALS if properties else 0,
+        "property_failures": property_failures,
         "breaches": [item.to_dict() for item in result.breaches],
     }
     print(json.dumps(payload, indent=2, sort_keys=True))
     log_event(
         LOGGER,
-        logging.INFO if result.ok else logging.ERROR,
+        logging.INFO if ok else logging.ERROR,
         "eval finished",
         event="eval",
-        ok=result.ok,
+        ok=ok,
         breaches=len(result.breaches),
+        property_failures=len(property_failures),
     )
-    return 0 if result.ok else 1
+    return 0 if ok else 1
 
 
 def cmd_eval(args: argparse.Namespace, settings: Settings) -> int:
-    return _run_eval(Path(args.suite), settings)
+    return _run_eval(Path(args.suite), settings, properties=True)
 
 
 def cmd_eval_regression(args: argparse.Namespace, settings: Settings) -> int:
-    return _run_eval(Path(args.suite), settings)
+    return _run_eval(Path(args.suite), settings, properties=False)
 
 
 def cmd_secretscan(args: argparse.Namespace, settings: Settings) -> int:
@@ -247,6 +273,7 @@ def build_parser() -> argparse.ArgumentParser:
     report.add_argument("--traces", required=True)
     report.add_argument("--out", required=True)
     report.add_argument("--generated-on", required=True)
+    report.add_argument("--source", required=True, choices=sorted([SOURCE_GENERATED, SOURCE_INGESTED]))
     report.set_defaults(func=cmd_report)
 
     demo = sub.add_parser("demo", help="policy, generate, and write a board under --out")

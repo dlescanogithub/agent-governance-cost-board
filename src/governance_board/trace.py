@@ -1,10 +1,8 @@
-"""JSONL trace events.
+"""JSONL trace events for the board.
 
-Native records use the keys documented in docs/architecture.md.
-`normalize_raw` also accepts a small alternate shape (trace_id, nested usage)
-so a file dropped in from another local eval harness can be aggregated.
-That alternate map was not verified against a private source repo; see
-docs/PROVENANCE.md.
+Native records are what the seeded generator writes.
+Runtime-evals files use a different shape and go through `governance_board.ingest`.
+`normalize_raw` still accepts a few alternate key names for ad-hoc files.
 """
 
 from __future__ import annotations

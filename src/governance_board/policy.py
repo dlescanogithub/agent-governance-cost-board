@@ -89,6 +89,9 @@ def check_policy(
 
 def _check_agent(agent: Agent, *, today: date, max_age: int) -> list[Violation]:
     found: list[Violation] = []
+    if agent.risk_tier not in {"low", "medium", "high"}:
+        found.append(_violation("risk_tier_required", agent.id, "risk tier must be low, medium, or high"))
+        return found
     if not agent.owner.strip():
         found.append(_violation("owner_required", agent.id, "owner is empty"))
     if agent.budget.per_run_micro_usd <= 0 or agent.budget.per_day_micro_usd <= 0:

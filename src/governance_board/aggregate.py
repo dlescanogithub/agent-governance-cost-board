@@ -72,7 +72,6 @@ class Board:
     def to_dict(self) -> dict[str, object]:
         return {
             "organization": self.organization,
-            "label": "simulated",
             "rollups": [rollup.to_dict() for rollup in self.rollups],
             "daily_cost_micro_usd": self.daily_cost_micro_usd,
             "unknown_agents": self.unknown_agents,
