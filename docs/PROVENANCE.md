@@ -1,20 +1,21 @@
 # Provenance
 
-The brief asked for a documented copy of eval helpers from the private repository `dlescanogithub/agent-runtime-evals`, commit `55cfd4183fb2489d77fc9c8552e008274dc78f77`, branch `cursor/agent-runtime-evals-mvp-7e58`.
+Shared portfolio utilities live in this repo as small vendored copies, maintained in parallel and kept aligned:
 
-This environment's GitHub credential received **HTTP 404** for that repository (clone and API). No file was copied from it. There is no NOTICE of third-party copyright because no code was taken.
-
-What this repo implemented locally, following the brief's description of that template:
-
-| Idea in the brief | Where it lives here |
+| Utility | Where it lives here |
 | --- | --- |
 | Cassette provider | `src/governance_board/providers/cassette.py` |
-| Fake provider | `src/governance_board/providers/fake.py` |
-| JSONL traces | `src/governance_board/trace.py` |
-| JSON logging | `src/governance_board/logging_setup.py` |
+| Invariant checks | `src/governance_board/evalkit/` |
+| JSON traces | `src/governance_board/trace.py` and `src/governance_board/ingest.py` |
+| Structured JSON logging | `src/governance_board/logging_setup.py` |
 | Secret scan | `src/governance_board/secretscan.py` |
-| Invariant evals, not trajectories | `src/governance_board/evalkit/` |
 
-`traces/runtime_evals_sample.jsonl` uses field names documented in `docs/architecture.md` (`trace_id`, nested `usage`, `tool_effects`). That sample is synthetic. It is **not** a verified dump of the other repo's format.
+`src/governance_board/secretscan.py` is the vendored scanner. Keep that file identical across the portfolio repos. Its sha256 is the lock:
 
-If the private repo becomes readable later, a follow-up should diff these modules against that commit and either replace them with a cited copy or record the drift here.
+sha256: 24dd770a4ebc88eb13991110a9531adda4202145c7ab648681d1b656d0c33a5e
+
+`make secretscan-hash` and `tests/test_secretscan.py` recompute that digest from the file bytes.
+
+What this repo adds around those utilities: the inventory schema, policy-as-code, the seeded generator, the cost board, the kill switch, prompt rollback, and the runtime-evals JSONL loader. The loader's field list (run id, step, tokens in and out, cost in micro-USD, latency, outcome) matches the trace format used by `dlescanogithub/agent-runtime-evals`. The mapping is in `docs/TRACE_INGEST.md`. The sample under `traces/samples/` is hand-written.
+
+Nothing in this repository is copied from employer or client work.

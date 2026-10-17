@@ -35,7 +35,6 @@
       "2026-10-16": 2250745,
       "2026-10-17": 2282515
     },
-    "label": "simulated",
     "organization": "Harborline Cooperative",
     "rollups": [
       {
@@ -241,7 +240,7 @@
   "command": "python -m governance_board report",
   "event_count": 2016,
   "generated_on": "2026-10-17",
-  "label": "simulated",
+  "illustrative": true,
   "meta": {
     "days": 14,
     "event_count": 2016,
@@ -254,5 +253,6 @@
     "start_date": "2026-10-04"
   },
   "organization": "Harborline Cooperative",
+  "source": "simulated-generator",
   "trace_file": "traces/fleet.jsonl"
 }

@@ -12,17 +12,17 @@ Owners are fictional role ids.
 | No backup owner | Medium | Medium | Policy `high_risk_backup_owner` for high tier | fleet-governor |
 | Stale review | High over a year | Medium | `review_fresh` against an injected clock | agent owner |
 | Per-run cap above per-day cap | Low | Medium (the cap is incoherent) | `cap_consistency` | finance-ops for finance agents; fleet-governor for the file |
-| Cost spike | Demonstrated in the sample | Medium in the simulation; unknown in a real fleet | Aggregator alerts; runbook kill switch | agent owner, with fleet-governor |
-| Latency SLO miss | Demonstrated for `bulletin-draft` | Low in the simulation | `p95_latency_slo_breach` alert | agent owner |
+| Cost spike | Planted in `traces/generation.yaml` so the cap alert can be shown. Illustrative, not an observed incident | Medium in the simulation; unknown in a real fleet | Aggregator alerts; runbook kill switch | agent owner, with fleet-governor |
+| Latency SLO miss | Planted for `bulletin-draft` in the same profile | Low in the simulation | `p95_latency_slo_breach` alert | agent owner |
 | Harmful effect name in a trace | Low if the generator is the only writer | High | Invariant `no_harmful_effect`; regression fixture proves the gate fails | fleet-governor |
 | Unapproved external effect | Low in the generator; the regression file includes one | High | Invariant `no_unapproved_external_action` | human queue |
 | Real provider turned on by accident | Low | Medium (spend, data leaving the machine) | Default off; evals refuse a non-offline setting; tests block sockets | whoever runs the command |
 | Secret committed | Low | High | `secretscan` in CI; `.env` gitignored | fleet-governor |
 | YAML rewrite drops comments | High if you use the control CLI | Low | Commands default to a new file; git diff | whoever runs the command |
 | Board mistaken for a certification | Medium in a portfolio reading | High (false assurance) | Disclaimer in the HTML and in this file | fleet-governor |
-| Alternate trace mapping is wrong for some other repo | High, the private source was not readable here | Low (only the sample file uses it) | Documented in `docs/PROVENANCE.md` | fleet-governor |
+| Ingest mapping drops or misreads a field | Medium if a file uses a different shape | Low for the hand-written sample; higher for a real export | `docs/TRACE_INGEST.md`; the loader rejects unknown fields | fleet-governor |
 
-Probability and impact are judgments for this portfolio, not measured frequencies.
+Probability and impact are judgments for this portfolio.
 
 ## Educational map
 

@@ -4,19 +4,20 @@ Policy checks, invariant evals, and a static cost board for a **simulated** flee
 
 ## Problem and result
 
-A fleet is hard to govern when ownership, human gates, and spend caps live in slides. This repo keeps them in YAML and checks them in CI, then rolls simulated JSONL traces into a board.
+A fleet is hard to govern when ownership, human gates, and spend caps live in slides. This repo keeps them in YAML and checks them in CI. The static board renders either a seeded generator file or an ingested JSONL file, and the header says which one.
 
-**Measured result (2026-10-17, package 0.1.0, Python 3.12.3):** simulated agent `refund-advisor` spent **3,319,160 micro-USD** on 2026-10-15, above its **1,200,000 micro-USD** daily cap (burn ratio 2.766). Command:
+The board demonstrates the mechanism: policy-as-code, budget caps, a kill switch, and prompt rollback. It does not report a spend finding. The `refund-advisor` day over its cap is planted by `spike.token_multiplier` in `traces/generation.yaml`. Every figure from that generator is a **SIMULATED / illustrative example**.
+
+**Measured result (2026-10-17, package 0.1.0, Python 3.12.3):** the fleet policy exits **0** with **0 violations**.
 
 ```bash
-python3 -m governance_board report \
+python3 -m governance_board policy \
   --inventory inventory/fleet.yaml \
-  --traces traces/fleet.jsonl \
-  --out docs/example-board \
-  --generated-on 2026-10-17
+  --prompts prompts/registry.yaml \
+  --today 2026-10-17
 ```
 
-The same run wrote `docs/example-board/summary.json` (3 alerts, 2016 simulated events). The dollar figure uses the in-repo simulated rate card (5 micro-USD per input token, 15 per output token), marked [EST] and not a vendor price. Commit for this artifact: see [docs/example-board/MEASURED.md](docs/example-board/MEASURED.md).
+The same day, `python3 -m pytest` (pytest 9.1.1) reported **28 passed**, total coverage **90.09%** (floor 80%). The illustrative board, including the planted spike, is described in [docs/example-board/EXAMPLE.md](docs/example-board/EXAMPLE.md).
 
 ## Demo
 
@@ -40,20 +41,38 @@ flowchart LR
   reg[Prompt registry] --> policy
   profile[Generation profile] --> gen[Seeded generator]
   inv --> gen
-  gen --> jsonl[JSONL traces]
+  gen --> jsonl[Generated JSONL]
+  file[Runtime-evals JSONL] --> ingest[Ingest and validate]
   jsonl --> agg[Aggregator]
+  ingest --> agg
   inv --> agg
   agg --> board[Static HTML and Markdown]
-  jsonl --> evals[Invariant evals]
+  jsonl --> evals[Invariant and property evals]
   policy --> ci[CI]
   evals --> ci
 ```
 
-Inventory and prompts are the source of truth. The generator is a stand-in for a runtime. The aggregator only reads traces. The HTML file embeds its CSS and SVG and does not load a CDN. See [docs/architecture.md](docs/architecture.md).
+Inventory and prompts are the source of truth. The generator is a stand-in for a runtime, and its spike is planted in the profile. Ingest reads a runtime-evals JSONL file when `--source ingested-runtime-evals` is set. The aggregator only reads events. The HTML file embeds its CSS and SVG and does not load a CDN. The header names the source. See [docs/architecture.md](docs/architecture.md) and [docs/TRACE_INGEST.md](docs/TRACE_INGEST.md).
 
 ## Results
 
-Measured 2026-10-17 from the command in the first section. Package 0.1.0. Window 2026-10-04 through 2026-10-17, seed `20261017`, 12 runs per agent per day, 2016 events. Costs are **simulated**. Latency values are the simulated `latency_ms` field; percentiles are computed by the aggregator (linear interpolation). Means and percentiles below are rounded to 1 decimal from `docs/example-board/summary.json`. Totals are exact integers in micro-USD.
+### Command results (measured)
+
+Recorded 2026-10-17, package 0.1.0, Python 3.12.3.
+
+| Command | Result |
+| --- | --- |
+| `python3 -m governance_board policy` on `inventory/fleet.yaml`, `--today 2026-10-17` | exit 0, 0 violations |
+| same command on `inventory/violating.yaml` | exit 1, 5 violations |
+| `python3 -m governance_board eval` | exit 0; 3 YAML cases and 32 seeded property trials, 0 breaches |
+| `python3 -m governance_board eval-regression` | exit 1; 3 breaches on one bad event (expected) |
+| `python3 -m pytest` (pytest 9.1.1) | 28 passed, coverage 90.09% |
+
+Property trials use seed `20261017`. A cap breach is flagged, an engaged kill switch blocks, rollback restores the previous prompt version, and an agent with no owner or no risk tier fails policy.
+
+### Illustrative board (simulated)
+
+**SIMULATED / illustrative example**, not a measurement. Window 2026-10-04 through 2026-10-17, seed `20261017`, 12 runs per agent per day, 2016 events. The `refund-advisor` spike and the `bulletin-draft` latency are planted in `traces/generation.yaml`. Latency values are the simulated `latency_ms` field. Percentiles use linear interpolation. Means and percentiles below are rounded to 1 decimal from `docs/example-board/summary.json`. Totals are exact integers in micro-USD from that file. The rate card is 5 and 15 micro-USD per token [EST], not a vendor price.
 
 | Agent | Runs | Cost total (micro-USD) | Latency p95 (ms) | Alerts |
 | --- | ---: | ---: | ---: | --- |
@@ -70,11 +89,7 @@ Measured 2026-10-17 from the command in the first section. Package 0.1.0. Window
 | shift-suggester | 168 | 1,653,445 | 961.2 | — |
 | safety-checklist | 168 | 833,315 | 553.3 | — |
 
-Fleet total: **34,851,655 micro-USD** ($34.8517 at the simulated rate) across 14 days.
-
-Policy on `inventory/fleet.yaml` with `prompts/registry.yaml` and `--today 2026-10-17`: **PASS, 0 violations**. The violating fixture exits non-zero (5 violations on this date). Eval suite: pass (3 cases, 0 breaches). `eval-regression`: fail (3 breaches on one bad event), which is the expected red gate.
-
-Pytest on 2026-10-17, Python 3.12.3, pytest 9.1.1, command `python3 -m pytest`: **22 passed**, total coverage **91.55%** (floor 80%).
+Illustrative fleet total: **34,851,655 micro-USD** ($34.8517 at the simulated rate) across 14 days. Three alerts on this file: per-run cap, per-day cap, and a p95 latency SLO. That is the mechanism on display. It is not an observed incident.
 
 ## Use cases, governance and business strategy
 
@@ -102,7 +117,8 @@ Fictional Harborline Cooperative. No real client.
 | Inventory YAML and JSON Schema | Implemented |
 | Policy-as-code CLI, plus a fixture that must fail CI | Implemented |
 | Seeded JSONL generator, aggregator, static HTML and Markdown | Implemented |
-| Invariant evals and a forced regression that must fail | Implemented |
+| Invariant evals, seeded property checks, and a forced regression that must fail | Implemented |
+| Runtime-evals JSONL ingest, with the source named on the board | Implemented |
 | Kill switch and versioned prompt rollback | Implemented |
 | NIST AI RMF and EU AI Act mapping | Implemented as an educational note, not a certification |
 | SSO / RBAC | Design only |
@@ -129,7 +145,7 @@ Fictional Harborline Cooperative. No real client.
 
 **Business problem.** Teams ship agents faster than they name an owner, a cap, and a human for the effects that leave the system.
 
-**ROI model [EST].** See [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md). The only measured money figure in this repo is the simulated micro-USD board, not a customer saving.
+**ROI model [EST].** See [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md). The dollar model is illustrative. The micro-USD board is a simulated example, not a customer saving.
 
 **Scope and phased rollout.** [docs/SCOPE.md](docs/SCOPE.md). This repo is phase 0: shadow data, local gates, no production runtime.
 
@@ -159,7 +175,7 @@ Configuration is environment variables only. `.env.example` is a template. `.env
 - It does not ship, page, or open tickets.
 - It does not call a paid model API in CI or in the default demo.
 - It does not score whether an answer is good.
-- It does not prove production use. Every trace in the repo is synthetic.
+- It does not prove production use. The committed fleet file is generated. The runtime-evals file in the repo is a hand-written sample.
 - It does not preserve YAML comments when the kill-switch or rollback command rewrites a file.
 
 ## How to reproduce
@@ -177,9 +193,23 @@ Cost: **zero** by default. No key. No network in tests or in the demo.
 | `make eval` | `python3 -m governance_board eval` |
 | `make eval-regression` | `python3 -m governance_board eval-regression` (this **exits non-zero** on purpose) |
 | `make generate` | `python3 -m governance_board generate-traces --inventory inventory/fleet.yaml --profile traces/generation.yaml --out traces/fleet.jsonl` |
-| `make report` | `python3 -m governance_board report --inventory inventory/fleet.yaml --traces traces/fleet.jsonl --out docs/example-board --generated-on 2026-10-17` |
+| `make report` | `python3 -m governance_board report --inventory inventory/fleet.yaml --traces traces/fleet.jsonl --out docs/example-board --generated-on 2026-10-17 --source simulated-generator` |
 | `make demo` | `python3 -m governance_board demo` |
 | `make secretscan` | `python3 -m governance_board secretscan` |
+| `make secretscan-hash` | recomputes the sha256 of `src/governance_board/secretscan.py` and checks `docs/PROVENANCE.md` |
+
+Ingest a file in the runtime-evals shape (the sample is hand-written):
+
+```bash
+python3 -m governance_board report \
+  --inventory inventory/fleet.yaml \
+  --traces traces/samples/runtime_evals_sample.jsonl \
+  --out /tmp/ingested-board \
+  --generated-on 2026-10-17 \
+  --source ingested-runtime-evals
+```
+
+`Dockerfile` is in the repo. It was **not built in the authoring environment** (`docker` was not available). This text does not claim an image build.
 
 The violating inventory must fail:
 
@@ -194,7 +224,7 @@ CI runs lint, mypy, pytest (coverage floor 80%), the secret scan, the fleet poli
 
 ## Next steps
 
-1. Point the aggregator at traces exported from a real runtime, still in shadow, still with the real provider off in CI.
+1. Point `--source ingested-runtime-evals` at a JSONL export from a runtime, still in shadow, still with the real provider off in CI. The loader and the sample are in the repo. A week of real traces is not.
 2. Decide who is allowed to edit the inventory (the RBAC design in `docs/SCOPE.md`).
 3. Deliver alerts somewhere a human already looks. This repo only writes the report.
 4. Add an answer-quality eval only after the effect and cost gates stay green.
@@ -205,6 +235,7 @@ CI runs lint, mypy, pytest (coverage floor 80%), the secret scan, the fleet poli
 | --- | --- |
 | [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) | Walkthrough in rioplatense Spanish |
 | [docs/architecture.md](docs/architecture.md) | Components and trace schema |
+| [docs/TRACE_INGEST.md](docs/TRACE_INGEST.md) | Generator schema, runtime-evals mapping, sample |
 | [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md) | ROI model [EST] |
 | [docs/DISCOVERY.md](docs/DISCOVERY.md) | Ten discovery questions |
 | [docs/SCOPE.md](docs/SCOPE.md) | Phases, assumptions, exit criteria |
@@ -215,6 +246,6 @@ CI runs lint, mypy, pytest (coverage floor 80%), the secret scan, the fleet poli
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | Cost-spike incident |
 | [docs/ADAPT_TO_A_REAL_CLIENT.md](docs/ADAPT_TO_A_REAL_CLIENT.md) | What to replace |
 | [docs/PROVENANCE.md](docs/PROVENANCE.md) | What was reused |
-| [docs/example-board/](docs/example-board/) | Generated HTML, Markdown, summary |
+| [docs/example-board/](docs/example-board/) | Illustrative HTML, Markdown, summary |
 | [SECURITY.md](SECURITY.md) | Reporting and secrets |
 | [CHANGELOG.md](CHANGELOG.md) | Release notes |

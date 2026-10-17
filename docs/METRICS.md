@@ -2,27 +2,34 @@
 
 Two layers. Do not mix them.
 
-## Measured on the simulated fleet (2026-10-17)
+## Command results (measured, 2026-10-17)
 
-Command and commit: `docs/example-board/MEASURED.md`. Package 0.1.0.
+Package 0.1.0. Python 3.12.3.
 
-| Metric | Definition | Value |
+| Metric | Command | Value |
 | --- | --- | --- |
-| Agents | Rows in `inventory/fleet.yaml` | 12 |
-| Policy violations | `policy` command, `--today 2026-10-17` | 0 |
-| Events | Lines in `traces/fleet.jsonl` | 2016 |
-| Alerts | Entries in `summary.json` | 3 |
-| Daily cap breach | `refund-advisor` on 2026-10-15 | 3,319,160 micro-USD vs cap 1,200,000 |
-| Latency SLO breach | `bulletin-draft` p95 | 5895.4 ms vs SLO 2000 ms |
-| Eval breaches on the suite | `evals/suite.yaml` | 0 |
-| Eval breaches on the regression | `evals/regression.yaml` | 3 (expected) |
-| Test coverage floor | `pytest` `--cov-fail-under` | 80% |
+| Agents | rows in `inventory/fleet.yaml` | 12 |
+| Policy violations | `policy` on the fleet, `--today 2026-10-17` | 0 (exit 0) |
+| Eval gate | `python3 -m governance_board eval` | exit 0; 3 YAML cases plus 32 property trials |
+| Regression gate | `python3 -m governance_board eval-regression` | exit 1; 3 breaches (expected) |
+| Coverage floor | `pytest` `--cov-fail-under` | 80% |
+
+## Illustrative board (simulated, not a measurement)
+
+Command and label: `docs/example-board/EXAMPLE.md`. The spike is planted in `traces/generation.yaml`.
+
+| Figure | Where it comes from | Value on the example file |
+| --- | --- | --- |
+| Events | seeded generator, seed 20261017 | 2016 |
+| Alerts | aggregator on that file | 3 |
+| Planted daily cap example | `refund-advisor` on 2026-10-15, `token_multiplier` 8 | 3,319,160 micro-USD vs cap 1,200,000 |
+| Planted latency example | `bulletin-draft` p95 | 5895.4 ms vs SLO 2000 ms |
 
 Percentiles use linear interpolation (`governance_board.stats.percentile`).
 
 Human approval rate is `approved / runs`, including runs with `approval: none` in the denominator. Rejection rate counts `status == rejected` or `approval == rejected`, over runs. Both are in `summary.json`.
 
-Quality of answers is **not measured**.
+Answer quality is out of scope.
 
 ## Success metrics if a team adopts the pattern [EST]
 

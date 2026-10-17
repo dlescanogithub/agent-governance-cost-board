@@ -1,6 +1,8 @@
 # Cost and governance board — Harborline Cooperative
 
-Label: **simulated**. Generated on 2026-10-17. Costs use the simulated rate card in `traces/generation.yaml` (not a vendor price).
+Date label: 2026-10-17.
+
+SIMULATED / illustrative example. Source: simulated generator. A spike is planted in traces/generation.yaml so a cap alert can be shown. This page demonstrates policy-as-code, budget caps, the kill switch, and prompt rollback. It is not a measurement.
 
 Alerts: **3**.
 
@@ -25,7 +27,7 @@ Alerts: **3**.
 - `per_day_cap_exceeded` **refund-advisor**: daily cost exceeded the per-day cap on 2026-10-15
 - `p95_latency_slo_breach` **bulletin-draft**: p95 latency 5895.4 ms > SLO 2000 ms
 
-## Daily fleet cost (simulated)
+## Daily fleet cost (simulated illustrative example)
 
 | Day | Cost |
 | --- | ---: |

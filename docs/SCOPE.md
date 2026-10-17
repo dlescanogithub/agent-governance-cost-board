@@ -7,7 +7,8 @@ No fees. No statement of work. Harborline Cooperative is fictional.
 - Inventory of 12 synthetic agents, JSON Schema, tier rubric.
 - Policy CLI and CI, including `inventory/violating.yaml` which must fail.
 - Seeded traces, aggregator, static board committed under `docs/example-board/`.
-- Invariant evals and `eval-regression`, which must fail.
+- Invariant evals, seeded property checks, and `eval-regression`, which must fail.
+- JSONL ingest for the runtime-evals trace shape, with a hand-written sample.
 - Kill switch and prompt rollback as local YAML edits.
 - Educational NIST / EU note with a disclaimer.
 
@@ -22,7 +23,7 @@ Exit criteria for phase 0:
 
 ## Phase 1 — shadow on a real export (design only)
 
-Replace the generator with JSONL copied from a runtime. Keep the real provider off in CI. Keep payloads out of the trace. Exit when a week of real traces (not in this repo) produces a board a human will open.
+The loader for that JSONL shape is implemented (`--source ingested-runtime-evals`). This phase is still the operational step: keep the real provider off in CI, keep payloads out of the trace, and exit when a week of real traces (not in this repo) produces a board a human will open.
 
 ## Phase 2 — gate the high tier (design only)
 

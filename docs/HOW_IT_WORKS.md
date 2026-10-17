@@ -22,15 +22,17 @@ Acá la planilla es `inventory/fleet.yaml`. El medidor es el agregador de trazas
 
 3. **Fixture que tiene que fallar.** `inventory/violating.yaml` es válido para el esquema y inválido para la política. CI exige que ese comando salga con código distinto de cero.
 
-4. **Trazas.** El generador usa una semilla fija y escribe JSONL: corrida, agente, versión, tiempo, estado, tokens, costo en micro-USD, latencia, aprobación y efectos. Los números salen de un rate card simulado, no de un proveedor.
+4. **Trazas simuladas.** El generador usa una semilla fija y escribe JSONL: corrida, agente, versión, tiempo, estado, tokens, costo en micro-USD, latencia, aprobación y efectos. Los números salen de un rate card simulado, no de un proveedor. El pico de `refund-advisor` está plantado en `traces/generation.yaml` (`token_multiplier`). Es un ejemplo ilustrativo para mostrar el tope. No es una medición.
 
-5. **Agregador.** Por agente calcula costo, latencia p50/p95, tasa de aprobación humana, tasa de rechazo y quema del tope diario. Si un día se pasa del tope, o si la p95 se pasa del SLO, deja una alerta.
+5. **Ingesta.** El tablero también lee un JSONL con el esquema de runtime-evals: `run_id`, `step`, tokens de entrada y salida, costo en micro-USD, latencia y `outcome`. El mapeo está en `docs/TRACE_INGEST.md`. La muestra en `traces/samples/` está escrita a mano y dice SAMPLE. El encabezado del HTML dice si los números salen del generador o de ese archivo.
 
-6. **Tablero.** Un HTML con CSS y gráficos SVG adentro, más un Markdown. No hay CDN ni red.
+6. **Agregador.** Por agente calcula costo, latencia p50/p95, tasa de aprobación humana, tasa de rechazo y quema del tope diario. Si un día se pasa del tope, o si la p95 se pasa del SLO, deja una alerta.
 
-7. **Evals.** No miran la secuencia exacta de herramientas. Miran invariantes: ningún efecto dañino, costo dentro del tope, ningún efecto externo sin `approval: approved`. `eval-regression` corre un caso malo y **tiene que fallar**. CI comprueba esa falla.
+7. **Tablero.** Un HTML con CSS y gráficos SVG adentro, más un Markdown. No hay CDN ni red. El encabezado nombra la fuente.
 
-8. **Incidente de costo.** El runbook corta el agente (`kill-switch`) y vuelve el prompt a una versión anterior (`rollback`).
+8. **Evals.** No miran la secuencia exacta de herramientas. Miran invariantes: ningún efecto dañino, costo dentro del tope, ningún efecto externo sin `approval: approved`. Además, `eval` corre propiedades con semilla: un costo por encima del tope siempre se marca, el kill switch enganchado siempre bloquea, el rollback vuelve a la versión anterior del prompt, y un agente sin dueño o sin tier no pasa la política. `eval-regression` corre un caso malo y **tiene que fallar**. CI comprueba esa falla.
+
+9. **Incidente de costo.** El runbook corta el agente (`kill-switch`) y vuelve el prompt a una versión anterior (`rollback`). El pico del ejemplo está plantado para poder practicar ese recorrido.
 
 ## Glosario
 
@@ -47,7 +49,7 @@ Acá la planilla es `inventory/fleet.yaml`. El medidor es el agregador de trazas
 ## Límites honestos
 
 - No certifica nada. El mapa a NIST y a la ley de IA de la UE es material de estudio. Mirá `docs/RISKS.md`.
-- No mide si la respuesta está bien. Mide gates, costo y latencia simulada.
+- No puntúa si la respuesta está bien. Chequea gates. El costo y la latencia del ejemplo son simulados.
 - No pagina a nadie. La alerta queda en el HTML.
 - No hay usuarios ni permisos.
 - El generador no es tráfico real. Si cambiás la semilla, cambian los números.
