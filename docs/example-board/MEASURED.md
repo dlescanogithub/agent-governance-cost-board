@@ -28,6 +28,11 @@ python3 -m governance_board report \
   --generated-on 2026-10-17
 ```
 
-Git commit that added these artifacts: `STAMP_AFTER_COMMIT`.
+Git commits:
+
+- `traces/fleet.jsonl` and `traces/fleet.meta.json`: `e54858f7621d9d438eea380cd4c90173abc6fb5f`
+- `docs/example-board/index.html`, `report.md`, and `summary.json`: `d8304b5cc50807fbf287589dcfc6275d1cc0405f`
+
+This stamp file was updated after those commits. Regenerating the board does not change the hashes above; a new generation needs a new stamp.
 
 Do not hand-edit the HTML. Regenerate it with the commands above. A test compares `traces/fleet.jsonl` to a fresh generator run.
