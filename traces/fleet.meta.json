@@ -1,0 +1,11 @@
+{
+  "days": 14,
+  "event_count": 2016,
+  "input_micro_usd_per_token": 5,
+  "label": "simulated",
+  "output_micro_usd_per_token": 15,
+  "price_note": "simulated illustrative rate, not a vendor price [EST]",
+  "runs_per_agent_per_day": 12,
+  "seed": 20261017,
+  "start_date": "2026-10-04"
+}

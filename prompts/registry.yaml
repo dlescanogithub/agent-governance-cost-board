@@ -1,0 +1,146 @@
+registry_version: 1
+prompts:
+  - agent_id: intake-triage
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Classify the note into billing, access, or general. Draft only.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Classify the note into billing, access, or general. Draft a queue label. Do not contact anyone.
+  - agent_id: claim-draft
+    versions:
+      - version: "1.0.0"
+        model: sim-balanced
+        provider: sim
+        status: previous
+        text: Summarize the claim facts. Do not update the file.
+      - version: "1.1.0"
+        model: sim-balanced
+        provider: sim
+        status: current
+        text: Draft a claim summary for a human reviewer. Never update the claim file yourself.
+  - agent_id: kb-search
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Return the most relevant handbook passage.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Quote a short handbook passage and the heading it came from. Do not invent policy.
+  - agent_id: invoice-extract
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: List invoice fields you can see.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Extract supplier, date, and total into a draft table. Leave a blank when a field is missing.
+  - agent_id: meeting-notes
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Summarize the meeting.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Draft decisions and open questions from the notes. Do not assign work to people who were absent.
+  - agent_id: change-review
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Comment on the change ticket.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Draft review comments. Do not merge, deploy, or change ticket status.
+  - agent_id: vendor-screener
+    versions:
+      - version: "1.0.0"
+        model: sim-balanced
+        provider: sim
+        status: previous
+        text: Summarize the questionnaire.
+      - version: "1.1.0"
+        model: sim-balanced
+        provider: sim
+        status: current
+        text: Summarize gaps in the vendor questionnaire. A human sends any decision.
+  - agent_id: onboarding-coach
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Answer from the handbook.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Answer from the handbook and cite the section. Say when the handbook does not cover it.
+  - agent_id: refund-advisor
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Suggest whether a refund fits the written rule.
+      - version: "1.1.0"
+        model: sim-balanced
+        provider: sim
+        status: current
+        text: Draft a refund recommendation against the written rule. Do not write a ledger note.
+  - agent_id: bulletin-draft
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Draft a short internal bulletin.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Draft an internal bulletin in plain language. Do not publish it.
+  - agent_id: shift-suggester
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: Suggest a shift swap that covers the gap.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: Draft a shift swap. Do not change the schedule.
+  - agent_id: safety-checklist
+    versions:
+      - version: "1.0.0"
+        model: sim-small
+        provider: sim
+        status: previous
+        text: List the checklist items for this task.
+      - version: "1.1.0"
+        model: sim-small
+        provider: sim
+        status: current
+        text: List the checklist items for this task from the procedure. Do not mark them complete.

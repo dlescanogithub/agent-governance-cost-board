@@ -1,0 +1,303 @@
+schema_version: 1
+review_max_age_days: 90
+organization: Harborline Cooperative
+agents:
+  - id: intake-triage
+    name: Intake triage
+    owner: queue-lead
+    backup_owner: queue-deputy
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Classify synthetic internal intake notes into work queues.
+    data_classes: [internal_ops, customer_pseudonym]
+    risk_tier: medium
+    approval_gates:
+      - id: drafts-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 80000, per_day_micro_usd: 3000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 60000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-09-02
+    eval_evidence: ["evals/evidence/fleet.md#intake-triage"]
+    prompt_id: intake-triage
+    prompt_version: "1.1.0"
+
+  - id: claim-draft
+    name: Claim draft
+    owner: claims-editor
+    backup_owner: claims-reviewer
+    version: "1.1.0"
+    model: sim-balanced
+    provider: sim
+    purpose: Draft a claim summary a human reviews before any file update.
+    data_classes: [customer_pseudonym, financial_instruction]
+    risk_tier: high
+    approval_gates:
+      - id: human-before-claim-file
+        kind: human
+        required: true
+        enforced_at: human_queue
+        effects_covered: [update_claim_file]
+    budget: {per_run_micro_usd: 150000, per_day_micro_usd: 4000000}
+    slo: {p95_latency_ms: 3000, cost_per_run_micro_usd: 100000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-09-10
+    eval_evidence: ["evals/evidence/fleet.md#claim-draft"]
+    prompt_id: claim-draft
+    prompt_version: "1.1.0"
+
+  - id: kb-search
+    name: Handbook search
+    owner: knowledge-steward
+    backup_owner: knowledge-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Retrieve passages from the internal handbook. Read only.
+    data_classes: [internal_ops]
+    risk_tier: low
+    approval_gates:
+      - id: read-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 50000, per_day_micro_usd: 2000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 40000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-08-20
+    eval_evidence: ["evals/evidence/fleet.md#kb-search"]
+    prompt_id: kb-search
+    prompt_version: "1.1.0"
+
+  - id: invoice-extract
+    name: Invoice extract
+    owner: finance-ops
+    backup_owner: finance-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Extract fields from synthetic invoices into a draft table.
+    data_classes: [financial_instruction]
+    risk_tier: medium
+    approval_gates:
+      - id: draft-fields-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 80000, per_day_micro_usd: 3000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 60000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-09-15
+    eval_evidence: ["evals/evidence/fleet.md#invoice-extract"]
+    prompt_id: invoice-extract
+    prompt_version: "1.1.0"
+
+  - id: meeting-notes
+    name: Meeting notes
+    owner: people-ops
+    backup_owner: people-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Summarize an internal meeting into a draft note.
+    data_classes: [internal_ops]
+    risk_tier: low
+    approval_gates:
+      - id: draft-note-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 50000, per_day_micro_usd: 2000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 40000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-08-28
+    eval_evidence: ["evals/evidence/fleet.md#meeting-notes"]
+    prompt_id: meeting-notes
+    prompt_version: "1.1.0"
+
+  - id: change-review
+    name: Change review
+    owner: change-lead
+    backup_owner: change-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Comment on an internal change ticket. Does not merge or deploy.
+    data_classes: [internal_ops]
+    risk_tier: medium
+    approval_gates:
+      - id: comment-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 80000, per_day_micro_usd: 3000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 60000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-09-18
+    eval_evidence: ["evals/evidence/fleet.md#change-review"]
+    prompt_id: change-review
+    prompt_version: "1.1.0"
+
+  - id: vendor-screener
+    name: Vendor screener
+    owner: procurement-lead
+    backup_owner: procurement-backup
+    version: "1.1.0"
+    model: sim-balanced
+    provider: sim
+    purpose: Summarize a vendor questionnaire. A human sends any decision.
+    data_classes: [vendor_questionnaire]
+    risk_tier: high
+    approval_gates:
+      - id: human-before-vendor-decision
+        kind: human
+        required: true
+        enforced_at: runtime_effect_check
+        effects_covered: [send_vendor_decision]
+    budget: {per_run_micro_usd: 150000, per_day_micro_usd: 4000000}
+    slo: {p95_latency_ms: 3000, cost_per_run_micro_usd: 100000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-09-22
+    eval_evidence: ["evals/evidence/fleet.md#vendor-screener"]
+    prompt_id: vendor-screener
+    prompt_version: "1.1.0"
+
+  - id: onboarding-coach
+    name: Onboarding coach
+    owner: people-ops
+    backup_owner: people-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Answer onboarding questions from the handbook. Draft only.
+    data_classes: [employee_directory]
+    risk_tier: low
+    approval_gates:
+      - id: draft-answer-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 50000, per_day_micro_usd: 2000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 40000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-09-25
+    eval_evidence: ["evals/evidence/fleet.md#onboarding-coach"]
+    prompt_id: onboarding-coach
+    prompt_version: "1.1.0"
+
+  - id: refund-advisor
+    name: Refund advisor
+    owner: finance-ops
+    backup_owner: finance-backup
+    version: "1.1.0"
+    model: sim-balanced
+    provider: sim
+    purpose: Recommend a refund. A human approves any ledger note.
+    data_classes: [financial_instruction, customer_pseudonym]
+    risk_tier: high
+    approval_gates:
+      - id: human-before-ledger
+        kind: human
+        required: true
+        enforced_at: human_queue
+        effects_covered: [write_ledger_note]
+    budget: {per_run_micro_usd: 100000, per_day_micro_usd: 1200000}
+    slo: {p95_latency_ms: 3000, cost_per_run_micro_usd: 90000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-01
+    eval_evidence: ["evals/evidence/fleet.md#refund-advisor"]
+    prompt_id: refund-advisor
+    prompt_version: "1.1.0"
+
+  - id: bulletin-draft
+    name: Bulletin draft
+    owner: people-ops
+    backup_owner: people-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Draft an internal bulletin. It does not publish.
+    data_classes: [internal_ops]
+    risk_tier: medium
+    approval_gates:
+      - id: draft-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 80000, per_day_micro_usd: 3000000}
+    slo: {p95_latency_ms: 2000, cost_per_run_micro_usd: 60000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-06
+    eval_evidence: ["evals/evidence/fleet.md#bulletin-draft"]
+    prompt_id: bulletin-draft
+    prompt_version: "1.1.0"
+
+  - id: shift-suggester
+    name: Shift suggester
+    owner: workplace-lead
+    backup_owner: workplace-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Suggest a shift swap. A human approves any schedule write.
+    data_classes: [employee_directory]
+    risk_tier: medium
+    approval_gates:
+      - id: human-before-schedule
+        kind: human
+        required: true
+        enforced_at: runtime_effect_check
+        effects_covered: [update_schedule]
+    budget: {per_run_micro_usd: 80000, per_day_micro_usd: 3000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 60000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-08
+    eval_evidence: ["evals/evidence/fleet.md#shift-suggester"]
+    prompt_id: shift-suggester
+    prompt_version: "1.1.0"
+
+  - id: safety-checklist
+    name: Safety checklist
+    owner: workplace-lead
+    backup_owner: workplace-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Remind a team of checklist items from the workplace procedure.
+    data_classes: [workplace_procedure]
+    risk_tier: low
+    approval_gates:
+      - id: reminder-only
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 50000, per_day_micro_usd: 2000000}
+    slo: {p95_latency_ms: 2500, cost_per_run_micro_usd: 40000}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-10
+    eval_evidence: ["evals/evidence/fleet.md#safety-checklist"]
+    prompt_id: safety-checklist
+    prompt_version: "1.1.0"

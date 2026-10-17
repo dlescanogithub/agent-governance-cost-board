@@ -1,0 +1,4 @@
+# SAMPLE: hand-written runtime-evals JSONL. Not a capture. Not generated.
+{"cost_micro_usd": 700, "latency_ms": 300, "outcome": "ok", "run_id": "sample-run-1", "step": "kb-search", "tokens_in": 80, "tokens_out": 20, "ts": "2026-10-10T12:00:00Z"}
+{"cost_micro_usd": 900, "latency_ms": 450, "outcome": "error", "run_id": "sample-run-2", "step": "safety-checklist", "tokens_in": 40, "tokens_out": 10, "ts": "2026-10-11T12:00:00Z"}
+{"cost_micro_usd": 1200, "latency_ms": 500, "outcome": "success", "run_id": "sample-run-3", "step": "meeting-notes", "tokens_in": 100, "tokens_out": 30, "ts": "2026-10-12T08:00:00Z"}

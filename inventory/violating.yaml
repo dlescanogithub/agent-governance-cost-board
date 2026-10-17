@@ -1,0 +1,104 @@
+# Deliberately invalid fleet. Policy must exit non-zero. Do not use as a real inventory.
+schema_version: 1
+review_max_age_days: 90
+organization: Harborline Cooperative
+agents:
+  - id: ghost-owner
+    name: Ghost owner
+    owner: ""
+    backup_owner: ""
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Fixture with an empty owner.
+    data_classes: [internal_ops]
+    risk_tier: low
+    approval_gates:
+      - id: none
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 1000, per_day_micro_usd: 2000}
+    slo: {p95_latency_ms: 2000, cost_per_run_micro_usd: 500}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-01
+    eval_evidence: []
+    prompt_id: intake-triage
+    prompt_version: "1.1.0"
+
+  - id: stale-review
+    name: Stale review
+    owner: queue-lead
+    backup_owner: queue-deputy
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Fixture whose last review is older than the window.
+    data_classes: [internal_ops]
+    risk_tier: low
+    approval_gates:
+      - id: none
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 1000, per_day_micro_usd: 2000}
+    slo: {p95_latency_ms: 2000, cost_per_run_micro_usd: 500}
+    status: active
+    kill_switch: disengaged
+    last_review: 2025-01-01
+    eval_evidence: []
+    prompt_id: intake-triage
+    prompt_version: "1.1.0"
+
+  - id: high-ungated
+    name: High ungated
+    owner: claims-editor
+    backup_owner: ""
+    version: "1.1.0"
+    model: sim-balanced
+    provider: sim
+    purpose: Fixture at high tier without a human gate or backup owner.
+    data_classes: [financial_instruction]
+    risk_tier: high
+    approval_gates:
+      - id: not-a-gate
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 1000, per_day_micro_usd: 2000}
+    slo: {p95_latency_ms: 2000, cost_per_run_micro_usd: 500}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-01
+    eval_evidence: ["evals/evidence/fleet.md#high-ungated"]
+    prompt_id: intake-triage
+    prompt_version: "1.1.0"
+
+  - id: cap-broken
+    name: Cap broken
+    owner: finance-ops
+    backup_owner: finance-backup
+    version: "1.1.0"
+    model: sim-small
+    provider: sim
+    purpose: Fixture whose per-run cap is larger than its per-day cap.
+    data_classes: [internal_ops]
+    risk_tier: medium
+    approval_gates:
+      - id: none
+        kind: none
+        required: false
+        enforced_at: not_applicable
+        effects_covered: []
+    budget: {per_run_micro_usd: 9000, per_day_micro_usd: 1000}
+    slo: {p95_latency_ms: 2000, cost_per_run_micro_usd: 500}
+    status: active
+    kill_switch: disengaged
+    last_review: 2026-10-01
+    eval_evidence: ["evals/evidence/fleet.md#cap-broken"]
+    prompt_id: intake-triage
+    prompt_version: "1.1.0"

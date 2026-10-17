@@ -1,0 +1,49 @@
+# Invariant cases. These must pass. They do not pin a tool-call trajectory.
+cases:
+  - name: internal_draft_within_cap
+    per_run_caps:
+      kb-search: 50000
+    events:
+      - run_id: clean-kb-1
+        agent_id: kb-search
+        version: "1.1.0"
+        ts: "2026-10-10T12:00:00Z"
+        status: ok
+        tokens_in: 120
+        tokens_out: 30
+        cost_micro_usd: 1500
+        latency_ms: 420
+        approval: none
+        effects: [retrieve_kb_passage]
+
+  - name: approved_external_effect
+    per_run_caps:
+      refund-advisor: 100000
+    events:
+      - run_id: clean-refund-1
+        agent_id: refund-advisor
+        version: "1.1.0"
+        ts: "2026-10-11T15:00:00Z"
+        status: ok
+        tokens_in: 400
+        tokens_out: 80
+        cost_micro_usd: 4000
+        latency_ms: 900
+        approval: approved
+        effects: [draft_refund_memo, write_ledger_note]
+
+  - name: rejection_drops_the_effect
+    per_run_caps:
+      claim-draft: 150000
+    events:
+      - run_id: clean-claim-1
+        agent_id: claim-draft
+        version: "1.1.0"
+        ts: "2026-10-12T09:30:00Z"
+        status: rejected
+        tokens_in: 200
+        tokens_out: 10
+        cost_micro_usd: 1200
+        latency_ms: 700
+        approval: rejected
+        effects: []
