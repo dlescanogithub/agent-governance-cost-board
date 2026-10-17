@@ -12,6 +12,7 @@ Package 0.1.0. Python 3.12.3.
 | Policy violations | `policy` on the fleet, `--today 2026-10-17` | 0 (exit 0) |
 | Eval gate | `python3 -m governance_board eval` | exit 0; 3 YAML cases plus 32 property trials |
 | Regression gate | `python3 -m governance_board eval-regression` | exit 1; 3 breaches (expected) |
+| Pytest | `python3 -m pytest` (pytest 9.1.1, Python 3.12.3, 2026-10-17) | 29 passed, total coverage 90.09% |
 | Coverage floor | `pytest` `--cov-fail-under` | 80% |
 
 ## Illustrative board (simulated, not a measurement)
