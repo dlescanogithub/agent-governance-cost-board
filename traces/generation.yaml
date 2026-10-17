@@ -1,0 +1,110 @@
+# Simulated traffic profile. Rates are illustrative [EST], not a vendor price.
+seed: 20261017
+start_date: "2026-10-04"
+days: 14
+runs_per_agent_per_day: 12
+error_rate: 0.02
+pricing:
+  input_micro_usd_per_token: 5
+  output_micro_usd_per_token: 15
+  label: simulated
+profiles:
+  intake-triage:
+    tokens_in_median: 1600
+    tokens_out_median: 180
+    latency_median_ms: 640
+    sigma: 0.22
+    internal_effect: suggest_queue
+    external_effect: null
+    external_probability: 0
+  claim-draft:
+    tokens_in_median: 2800
+    tokens_out_median: 700
+    latency_median_ms: 980
+    sigma: 0.25
+    internal_effect: draft_claim_summary
+    external_effect: update_claim_file
+    external_probability: 0.3
+  kb-search:
+    tokens_in_median: 900
+    tokens_out_median: 220
+    latency_median_ms: 480
+    sigma: 0.2
+    internal_effect: retrieve_kb_passage
+    external_effect: null
+    external_probability: 0
+  invoice-extract:
+    tokens_in_median: 2100
+    tokens_out_median: 260
+    latency_median_ms: 760
+    sigma: 0.22
+    internal_effect: draft_invoice_fields
+    external_effect: null
+    external_probability: 0
+  meeting-notes:
+    tokens_in_median: 1400
+    tokens_out_median: 500
+    latency_median_ms: 820
+    sigma: 0.24
+    internal_effect: draft_meeting_note
+    external_effect: null
+    external_probability: 0
+  change-review:
+    tokens_in_median: 1800
+    tokens_out_median: 400
+    latency_median_ms: 880
+    sigma: 0.22
+    internal_effect: draft_change_comment
+    external_effect: null
+    external_probability: 0
+  vendor-screener:
+    tokens_in_median: 2400
+    tokens_out_median: 450
+    latency_median_ms: 1020
+    sigma: 0.25
+    internal_effect: draft_vendor_summary
+    external_effect: send_vendor_decision
+    external_probability: 0.2
+  onboarding-coach:
+    tokens_in_median: 700
+    tokens_out_median: 280
+    latency_median_ms: 540
+    sigma: 0.2
+    internal_effect: draft_onboarding_answer
+    external_effect: null
+    external_probability: 0
+  refund-advisor:
+    tokens_in_median: 3500
+    tokens_out_median: 900
+    latency_median_ms: 1100
+    sigma: 0.28
+    internal_effect: draft_refund_memo
+    external_effect: write_ledger_note
+    external_probability: 0.35
+    spike:
+      date: "2026-10-15"
+      token_multiplier: 8
+  bulletin-draft:
+    tokens_in_median: 2200
+    tokens_out_median: 800
+    latency_median_ms: 2800
+    sigma: 0.45
+    internal_effect: draft_bulletin
+    external_effect: null
+    external_probability: 0
+  shift-suggester:
+    tokens_in_median: 1200
+    tokens_out_median: 240
+    latency_median_ms: 700
+    sigma: 0.22
+    internal_effect: draft_shift_plan
+    external_effect: update_schedule
+    external_probability: 0.25
+  safety-checklist:
+    tokens_in_median: 500
+    tokens_out_median: 160
+    latency_median_ms: 420
+    sigma: 0.18
+    internal_effect: draft_checklist_reminder
+    external_effect: null
+    external_probability: 0

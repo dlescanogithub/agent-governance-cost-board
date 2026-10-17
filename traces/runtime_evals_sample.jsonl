@@ -1,0 +1,1 @@
+{"agent": "kb-search", "agent_version": "1.1.0", "cost": {"micro_usd": 900}, "elapsed_ms": 300, "human_approval": "none", "outcome": "success", "timestamp": "2026-10-10T12:00:00Z", "tool_effects": ["retrieve_kb_passage"], "trace_id": "alt-1", "usage": {"completion_tokens": 20, "prompt_tokens": 80}}
