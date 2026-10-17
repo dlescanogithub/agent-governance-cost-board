@@ -17,7 +17,7 @@ python3 -m governance_board policy \
   --today 2026-10-17
 ```
 
-The same day, `python3 -m pytest` (pytest 9.1.1) reported **28 passed**, total coverage **90.09%** (floor 80%). The illustrative board, including the planted spike, is described in [docs/example-board/EXAMPLE.md](docs/example-board/EXAMPLE.md).
+On 2026-10-17, command `python3 -m pytest` (pytest 9.1.1, Python 3.12.3) reported **29 passed**, total coverage **90.09%** (floor 80%). The illustrative board, including the planted spike, is described in [docs/example-board/EXAMPLE.md](docs/example-board/EXAMPLE.md).
 
 ## Demo
 
@@ -66,7 +66,7 @@ Recorded 2026-10-17, package 0.1.0, Python 3.12.3.
 | same command on `inventory/violating.yaml` | exit 1, 5 violations |
 | `python3 -m governance_board eval` | exit 0; 3 YAML cases and 32 seeded property trials, 0 breaches |
 | `python3 -m governance_board eval-regression` | exit 1; 3 breaches on one bad event (expected) |
-| `python3 -m pytest` (pytest 9.1.1) | 28 passed, coverage 90.09% |
+| `python3 -m pytest` (pytest 9.1.1, Python 3.12.3, 2026-10-17) | 29 passed, coverage 90.09% |
 
 Property trials use seed `20261017`. A cap breach is flagged, an engaged kill switch blocks, rollback restores the previous prompt version, and an agent with no owner or no risk tier fails policy.
 

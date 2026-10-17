@@ -15,5 +15,6 @@ Same day, still 0.1.0 (no tag):
 - Runtime-evals JSONL ingest, validation, a hand-written sample, and a source line on the board header.
 - Seeded property checks on the eval gate. The forced regression still fails on purpose.
 - Secret scanner aligned with the shared portfolio pattern list. `docs/PROVENANCE.md` records its sha256.
+- Recorded pytest result corrected to 29 passed and 90.09% coverage. Command `python3 -m pytest`, pytest 9.1.1, Python 3.12.3, 2026-10-17.
 
 This version does not claim a production deployment. The `Dockerfile` was not built in the authoring environment.
