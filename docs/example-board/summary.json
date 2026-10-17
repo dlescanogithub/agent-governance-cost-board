@@ -1,0 +1,258 @@
+{
+  "alert_count": 3,
+  "alerts": [
+    {
+      "agent_id": "refund-advisor",
+      "code": "per_run_cap_exceeded",
+      "message": "12 runs over the per-run cap of 100000 micro-USD"
+    },
+    {
+      "agent_id": "refund-advisor",
+      "code": "per_day_cap_exceeded",
+      "message": "daily cost exceeded the per-day cap on 2026-10-15"
+    },
+    {
+      "agent_id": "bulletin-draft",
+      "code": "p95_latency_slo_breach",
+      "message": "p95 latency 5895.4 ms > SLO 2000 ms"
+    }
+  ],
+  "board": {
+    "alert_count": 3,
+    "daily_cost_micro_usd": {
+      "2026-10-04": 2283200,
+      "2026-10-05": 2297335,
+      "2026-10-06": 2276945,
+      "2026-10-07": 2265825,
+      "2026-10-08": 2265240,
+      "2026-10-09": 2299130,
+      "2026-10-10": 2316125,
+      "2026-10-11": 2275100,
+      "2026-10-12": 2315425,
+      "2026-10-13": 2286440,
+      "2026-10-14": 2269840,
+      "2026-10-15": 5167790,
+      "2026-10-16": 2250745,
+      "2026-10-17": 2282515
+    },
+    "label": "simulated",
+    "organization": "Harborline Cooperative",
+    "rollups": [
+      {
+        "agent_id": "intake-triage",
+        "alerts": [],
+        "budget_burn_ratio": 0.04604833333333333,
+        "cost_micro_usd_total": 1814505,
+        "cost_per_run_mean": 10800.625,
+        "cost_per_run_p50": 10717.5,
+        "errors": 2,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 626.0,
+        "latency_p95_ms": 919.8500000000001,
+        "max_day_cost_micro_usd": 138145,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "claim-draft",
+        "alerts": [],
+        "budget_burn_ratio": 0.0899175,
+        "cost_micro_usd_total": 4286595,
+        "cost_per_run_mean": 25515.446428571428,
+        "cost_per_run_p50": 24847.5,
+        "errors": 2,
+        "human_approval_rate": 0.16666666666666666,
+        "latency_p50_ms": 967.5,
+        "latency_p95_ms": 1465.2,
+        "max_day_cost_micro_usd": 359670,
+        "rejection_rate": 0.05952380952380952,
+        "runs": 168
+      },
+      {
+        "agent_id": "kb-search",
+        "alerts": [],
+        "budget_burn_ratio": 0.0506275,
+        "cost_micro_usd_total": 1306175,
+        "cost_per_run_mean": 7774.851190476191,
+        "cost_per_run_p50": 7765.0,
+        "errors": 4,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 483.0,
+        "latency_p95_ms": 670.8000000000001,
+        "max_day_cost_micro_usd": 101255,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "invoice-extract",
+        "alerts": [],
+        "budget_burn_ratio": 0.06423166666666667,
+        "cost_micro_usd_total": 2461840,
+        "cost_per_run_mean": 14653.809523809523,
+        "cost_per_run_p50": 14555.0,
+        "errors": 5,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 780.5,
+        "latency_p95_ms": 1076.9,
+        "max_day_cost_micro_usd": 192695,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "meeting-notes",
+        "alerts": [],
+        "budget_burn_ratio": 0.09633,
+        "cost_micro_usd_total": 2500185,
+        "cost_per_run_mean": 14882.05357142857,
+        "cost_per_run_p50": 14735.0,
+        "errors": 4,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 828.0,
+        "latency_p95_ms": 1278.25,
+        "max_day_cost_micro_usd": 192660,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "change-review",
+        "alerts": [],
+        "budget_burn_ratio": 0.06481666666666666,
+        "cost_micro_usd_total": 2586270,
+        "cost_per_run_mean": 15394.464285714286,
+        "cost_per_run_p50": 15157.5,
+        "errors": 5,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 868.5,
+        "latency_p95_ms": 1238.3000000000002,
+        "max_day_cost_micro_usd": 194450,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "vendor-screener",
+        "alerts": [],
+        "budget_burn_ratio": 0.0615475,
+        "cost_micro_usd_total": 3225035,
+        "cost_per_run_mean": 19196.636904761905,
+        "cost_per_run_p50": 18825.0,
+        "errors": 4,
+        "human_approval_rate": 0.10119047619047619,
+        "latency_p50_ms": 1019.0,
+        "latency_p95_ms": 1500.0500000000002,
+        "max_day_cost_micro_usd": 246190,
+        "rejection_rate": 0.041666666666666664,
+        "runs": 168
+      },
+      {
+        "agent_id": "onboarding-coach",
+        "alerts": [],
+        "budget_burn_ratio": 0.0498725,
+        "cost_micro_usd_total": 1310695,
+        "cost_per_run_mean": 7801.755952380952,
+        "cost_per_run_p50": 7575.0,
+        "errors": 3,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 551.0,
+        "latency_p95_ms": 710.45,
+        "max_day_cost_micro_usd": 99745,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "refund-advisor",
+        "alerts": [
+          {
+            "agent_id": "refund-advisor",
+            "code": "per_run_cap_exceeded",
+            "message": "12 runs over the per-run cap of 100000 micro-USD"
+          },
+          {
+            "agent_id": "refund-advisor",
+            "code": "per_day_cap_exceeded",
+            "message": "daily cost exceeded the per-day cap on 2026-10-15"
+          }
+        ],
+        "budget_burn_ratio": 2.7659666666666665,
+        "cost_micro_usd_total": 8436435,
+        "cost_per_run_mean": 50216.875,
+        "cost_per_run_p50": 32677.5,
+        "errors": 4,
+        "human_approval_rate": 0.26785714285714285,
+        "latency_p50_ms": 1100.0,
+        "latency_p95_ms": 1761.25,
+        "max_day_cost_micro_usd": 3319160,
+        "rejection_rate": 0.047619047619047616,
+        "runs": 168
+      },
+      {
+        "agent_id": "bulletin-draft",
+        "alerts": [
+          {
+            "agent_id": "bulletin-draft",
+            "code": "p95_latency_slo_breach",
+            "message": "p95 latency 5895.4 ms > SLO 2000 ms"
+          }
+        ],
+        "budget_burn_ratio": 0.12615333333333334,
+        "cost_micro_usd_total": 4437160,
+        "cost_per_run_mean": 26411.666666666668,
+        "cost_per_run_p50": 25332.5,
+        "errors": 7,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 2905.5,
+        "latency_p95_ms": 5895.4,
+        "max_day_cost_micro_usd": 378460,
+        "rejection_rate": 0.0,
+        "runs": 168
+      },
+      {
+        "agent_id": "shift-suggester",
+        "alerts": [],
+        "budget_burn_ratio": 0.043008333333333336,
+        "cost_micro_usd_total": 1653445,
+        "cost_per_run_mean": 9841.934523809523,
+        "cost_per_run_p50": 9752.5,
+        "errors": 4,
+        "human_approval_rate": 0.23214285714285715,
+        "latency_p50_ms": 705.5,
+        "latency_p95_ms": 961.2,
+        "max_day_cost_micro_usd": 129025,
+        "rejection_rate": 0.02976190476190476,
+        "runs": 168
+      },
+      {
+        "agent_id": "safety-checklist",
+        "alerts": [],
+        "budget_burn_ratio": 0.0316025,
+        "cost_micro_usd_total": 833315,
+        "cost_per_run_mean": 4960.208333333333,
+        "cost_per_run_p50": 4930.0,
+        "errors": 3,
+        "human_approval_rate": 0.0,
+        "latency_p50_ms": 402.5,
+        "latency_p95_ms": 553.3,
+        "max_day_cost_micro_usd": 63205,
+        "rejection_rate": 0.0,
+        "runs": 168
+      }
+    ],
+    "unknown_agents": []
+  },
+  "command": "python -m governance_board report",
+  "event_count": 2016,
+  "generated_on": "2026-10-17",
+  "label": "simulated",
+  "meta": {
+    "days": 14,
+    "event_count": 2016,
+    "input_micro_usd_per_token": 5,
+    "label": "simulated",
+    "output_micro_usd_per_token": 15,
+    "price_note": "simulated illustrative rate, not a vendor price [EST]",
+    "runs_per_agent_per_day": 12,
+    "seed": 20261017,
+    "start_date": "2026-10-04"
+  },
+  "organization": "Harborline Cooperative",
+  "trace_file": "traces/fleet.jsonl"
+}

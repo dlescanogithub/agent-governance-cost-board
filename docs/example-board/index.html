@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Governance cost board — Harborline Cooperative</title>
+<style>
+body { font-family: Palatino, Georgia, serif; margin: 2rem; color: #1c2430; background: #f6f4ef; }
+h1 { font-size: 1.6rem; margin-bottom: 0.2rem; }
+p, li, td, th { line-height: 1.4; }
+.banner { background: #efe6c9; border: 1px solid #c8b56a; padding: 0.6rem 0.8rem; }
+table { border-collapse: collapse; width: 100%; background: white; margin: 1rem 0 2rem; }
+th, td { border: 1px solid #d5d0c6; padding: 0.35rem 0.45rem; font-size: 0.92rem; text-align: left; }
+th { background: #e7efe9; }
+code { font-family: ui-monospace, monospace; }
+</style>
+</head>
+<body>
+<h1>Governance and cost board</h1>
+<p>Harborline Cooperative · generated 2026-10-17</p>
+<p class="banner">Simulated data. This page is a static report.
+It is not a certification, not legal advice, and it does not claim NIST or EU AI Act compliance.</p>
+<h2>Alerts (3)</h2>
+<ul>
+<li><code>per_run_cap_exceeded</code> <strong>refund-advisor</strong> — 12 runs over the per-run cap of 100000 micro-USD</li><li><code>per_day_cap_exceeded</code> <strong>refund-advisor</strong> — daily cost exceeded the per-day cap on 2026-10-15</li><li><code>p95_latency_slo_breach</code> <strong>bulletin-draft</strong> — p95 latency 5895.4 ms &gt; SLO 2000 ms</li>
+</ul>
+<h2>Per agent</h2>
+<table>
+<thead><tr>
+<th>Agent</th><th>Runs</th><th>Cost total</th><th>Cost/run mean</th>
+<th>Latency p50 ms</th><th>Latency p95 ms</th><th>Approval rate</th>
+<th>Rejection rate</th><th>Max day / cap</th><th>Alerts</th>
+</tr></thead>
+<tbody>
+<tr><td>intake-triage</td><td>168</td><td>$1.8145</td><td>$0.0108</td><td>626.0</td><td>919.9</td><td>0.0%</td><td>0.0%</td><td>4.6%</td><td>—</td></tr><tr><td>claim-draft</td><td>168</td><td>$4.2866</td><td>$0.0255</td><td>967.5</td><td>1465.2</td><td>16.7%</td><td>6.0%</td><td>9.0%</td><td>—</td></tr><tr><td>kb-search</td><td>168</td><td>$1.3062</td><td>$0.0078</td><td>483.0</td><td>670.8</td><td>0.0%</td><td>0.0%</td><td>5.1%</td><td>—</td></tr><tr><td>invoice-extract</td><td>168</td><td>$2.4618</td><td>$0.0147</td><td>780.5</td><td>1076.9</td><td>0.0%</td><td>0.0%</td><td>6.4%</td><td>—</td></tr><tr><td>meeting-notes</td><td>168</td><td>$2.5002</td><td>$0.0149</td><td>828.0</td><td>1278.2</td><td>0.0%</td><td>0.0%</td><td>9.6%</td><td>—</td></tr><tr><td>change-review</td><td>168</td><td>$2.5863</td><td>$0.0154</td><td>868.5</td><td>1238.3</td><td>0.0%</td><td>0.0%</td><td>6.5%</td><td>—</td></tr><tr><td>vendor-screener</td><td>168</td><td>$3.2250</td><td>$0.0192</td><td>1019.0</td><td>1500.1</td><td>10.1%</td><td>4.2%</td><td>6.2%</td><td>—</td></tr><tr><td>onboarding-coach</td><td>168</td><td>$1.3107</td><td>$0.0078</td><td>551.0</td><td>710.5</td><td>0.0%</td><td>0.0%</td><td>5.0%</td><td>—</td></tr><tr><td>refund-advisor</td><td>168</td><td>$8.4364</td><td>$0.0502</td><td>1100.0</td><td>1761.2</td><td>26.8%</td><td>4.8%</td><td>276.6%</td><td>per_run_cap_exceeded, per_day_cap_exceeded</td></tr><tr><td>bulletin-draft</td><td>168</td><td>$4.4372</td><td>$0.0264</td><td>2905.5</td><td>5895.4</td><td>0.0%</td><td>0.0%</td><td>12.6%</td><td>p95_latency_slo_breach</td></tr><tr><td>shift-suggester</td><td>168</td><td>$1.6534</td><td>$0.0098</td><td>705.5</td><td>961.2</td><td>23.2%</td><td>3.0%</td><td>4.3%</td><td>—</td></tr><tr><td>safety-checklist</td><td>168</td><td>$0.8333</td><td>$0.0050</td><td>402.5</td><td>553.3</td><td>0.0%</td><td>0.0%</td><td>3.2%</td><td>—</td></tr>
+</tbody>
+</table>
+<h2>Charts</h2>
+<svg role="img" aria-label="Mean cost per run (micro-USD, simulated)" width="720" height="348" viewBox="0 0 720 348">
+<text x="0" y="16" font-size="14" font-family="sans-serif">Mean cost per run (micro-USD, simulated)</text>
+<text x="0" y="41" font-size="12" font-family="sans-serif">intake-triage</text>
+<rect x="180" y="28" width="98.9" height="18" fill="#0f6e6b"></rect>
+<text x="284.9" y="41" font-size="12" font-family="sans-serif">10801 µUSD</text>
+<text x="0" y="67" font-size="12" font-family="sans-serif">claim-draft</text>
+<rect x="180" y="54" width="233.7" height="18" fill="#0f6e6b"></rect>
+<text x="419.7" y="67" font-size="12" font-family="sans-serif">25515 µUSD</text>
+<text x="0" y="93" font-size="12" font-family="sans-serif">kb-search</text>
+<rect x="180" y="80" width="71.2" height="18" fill="#0f6e6b"></rect>
+<text x="257.2" y="93" font-size="12" font-family="sans-serif">7775 µUSD</text>
+<text x="0" y="119" font-size="12" font-family="sans-serif">invoice-extract</text>
+<rect x="180" y="106" width="134.2" height="18" fill="#0f6e6b"></rect>
+<text x="320.2" y="119" font-size="12" font-family="sans-serif">14654 µUSD</text>
+<text x="0" y="145" font-size="12" font-family="sans-serif">meeting-notes</text>
+<rect x="180" y="132" width="136.3" height="18" fill="#0f6e6b"></rect>
+<text x="322.3" y="145" font-size="12" font-family="sans-serif">14882 µUSD</text>
+<text x="0" y="171" font-size="12" font-family="sans-serif">change-review</text>
+<rect x="180" y="158" width="141.0" height="18" fill="#0f6e6b"></rect>
+<text x="327.0" y="171" font-size="12" font-family="sans-serif">15394 µUSD</text>
+<text x="0" y="197" font-size="12" font-family="sans-serif">vendor-screener</text>
+<rect x="180" y="184" width="175.8" height="18" fill="#0f6e6b"></rect>
+<text x="361.8" y="197" font-size="12" font-family="sans-serif">19197 µUSD</text>
+<text x="0" y="223" font-size="12" font-family="sans-serif">onboarding-coach</text>
+<rect x="180" y="210" width="71.5" height="18" fill="#0f6e6b"></rect>
+<text x="257.5" y="223" font-size="12" font-family="sans-serif">7802 µUSD</text>
+<text x="0" y="249" font-size="12" font-family="sans-serif">refund-advisor</text>
+<rect x="180" y="236" width="460.0" height="18" fill="#0f6e6b"></rect>
+<text x="646.0" y="249" font-size="12" font-family="sans-serif">50217 µUSD</text>
+<text x="0" y="275" font-size="12" font-family="sans-serif">bulletin-draft</text>
+<rect x="180" y="262" width="241.9" height="18" fill="#0f6e6b"></rect>
+<text x="427.9" y="275" font-size="12" font-family="sans-serif">26412 µUSD</text>
+<text x="0" y="301" font-size="12" font-family="sans-serif">shift-suggester</text>
+<rect x="180" y="288" width="90.2" height="18" fill="#0f6e6b"></rect>
+<text x="276.2" y="301" font-size="12" font-family="sans-serif">9842 µUSD</text>
+<text x="0" y="327" font-size="12" font-family="sans-serif">safety-checklist</text>
+<rect x="180" y="314" width="45.4" height="18" fill="#0f6e6b"></rect>
+<text x="231.4" y="327" font-size="12" font-family="sans-serif">4960 µUSD</text>
+</svg>
+<svg role="img" aria-label="Latency p95 (ms, simulated)" width="720" height="348" viewBox="0 0 720 348">
+<text x="0" y="16" font-size="14" font-family="sans-serif">Latency p95 (ms, simulated)</text>
+<text x="0" y="41" font-size="12" font-family="sans-serif">intake-triage</text>
+<rect x="180" y="28" width="71.8" height="18" fill="#0f6e6b"></rect>
+<text x="257.8" y="41" font-size="12" font-family="sans-serif">920 ms</text>
+<text x="0" y="67" font-size="12" font-family="sans-serif">claim-draft</text>
+<rect x="180" y="54" width="114.3" height="18" fill="#0f6e6b"></rect>
+<text x="300.3" y="67" font-size="12" font-family="sans-serif">1465 ms</text>
+<text x="0" y="93" font-size="12" font-family="sans-serif">kb-search</text>
+<rect x="180" y="80" width="52.3" height="18" fill="#0f6e6b"></rect>
+<text x="238.3" y="93" font-size="12" font-family="sans-serif">671 ms</text>
+<text x="0" y="119" font-size="12" font-family="sans-serif">invoice-extract</text>
+<rect x="180" y="106" width="84.0" height="18" fill="#0f6e6b"></rect>
+<text x="270.0" y="119" font-size="12" font-family="sans-serif">1077 ms</text>
+<text x="0" y="145" font-size="12" font-family="sans-serif">meeting-notes</text>
+<rect x="180" y="132" width="99.7" height="18" fill="#0f6e6b"></rect>
+<text x="285.7" y="145" font-size="12" font-family="sans-serif">1278 ms</text>
+<text x="0" y="171" font-size="12" font-family="sans-serif">change-review</text>
+<rect x="180" y="158" width="96.6" height="18" fill="#0f6e6b"></rect>
+<text x="282.6" y="171" font-size="12" font-family="sans-serif">1238 ms</text>
+<text x="0" y="197" font-size="12" font-family="sans-serif">vendor-screener</text>
+<rect x="180" y="184" width="117.0" height="18" fill="#0f6e6b"></rect>
+<text x="303.0" y="197" font-size="12" font-family="sans-serif">1500 ms</text>
+<text x="0" y="223" font-size="12" font-family="sans-serif">onboarding-coach</text>
+<rect x="180" y="210" width="55.4" height="18" fill="#0f6e6b"></rect>
+<text x="241.4" y="223" font-size="12" font-family="sans-serif">710 ms</text>
+<text x="0" y="249" font-size="12" font-family="sans-serif">refund-advisor</text>
+<rect x="180" y="236" width="137.4" height="18" fill="#0f6e6b"></rect>
+<text x="323.4" y="249" font-size="12" font-family="sans-serif">1761 ms</text>
+<text x="0" y="275" font-size="12" font-family="sans-serif">bulletin-draft</text>
+<rect x="180" y="262" width="460.0" height="18" fill="#0f6e6b"></rect>
+<text x="646.0" y="275" font-size="12" font-family="sans-serif">5895 ms</text>
+<text x="0" y="301" font-size="12" font-family="sans-serif">shift-suggester</text>
+<rect x="180" y="288" width="75.0" height="18" fill="#0f6e6b"></rect>
+<text x="261.0" y="301" font-size="12" font-family="sans-serif">961 ms</text>
+<text x="0" y="327" font-size="12" font-family="sans-serif">safety-checklist</text>
+<rect x="180" y="314" width="43.2" height="18" fill="#0f6e6b"></rect>
+<text x="229.2" y="327" font-size="12" font-family="sans-serif">553 ms</text>
+</svg>
+<svg role="img" aria-label="Fleet cost by day (micro-USD, simulated)" width="720" height="400" viewBox="0 0 720 400">
+<text x="0" y="16" font-size="14" font-family="sans-serif">Fleet cost by day (micro-USD, simulated)</text>
+<text x="0" y="41" font-size="12" font-family="sans-serif">2026-10-04</text>
+<rect x="180" y="28" width="203.2" height="18" fill="#0f6e6b"></rect>
+<text x="389.2" y="41" font-size="12" font-family="sans-serif">2283200 µUSD</text>
+<text x="0" y="67" font-size="12" font-family="sans-serif">2026-10-05</text>
+<rect x="180" y="54" width="204.5" height="18" fill="#0f6e6b"></rect>
+<text x="390.5" y="67" font-size="12" font-family="sans-serif">2297335 µUSD</text>
+<text x="0" y="93" font-size="12" font-family="sans-serif">2026-10-06</text>
+<rect x="180" y="80" width="202.7" height="18" fill="#0f6e6b"></rect>
+<text x="388.7" y="93" font-size="12" font-family="sans-serif">2276945 µUSD</text>
+<text x="0" y="119" font-size="12" font-family="sans-serif">2026-10-07</text>
+<rect x="180" y="106" width="201.7" height="18" fill="#0f6e6b"></rect>
+<text x="387.7" y="119" font-size="12" font-family="sans-serif">2265825 µUSD</text>
+<text x="0" y="145" font-size="12" font-family="sans-serif">2026-10-08</text>
+<rect x="180" y="132" width="201.6" height="18" fill="#0f6e6b"></rect>
+<text x="387.6" y="145" font-size="12" font-family="sans-serif">2265240 µUSD</text>
+<text x="0" y="171" font-size="12" font-family="sans-serif">2026-10-09</text>
+<rect x="180" y="158" width="204.7" height="18" fill="#0f6e6b"></rect>
+<text x="390.7" y="171" font-size="12" font-family="sans-serif">2299130 µUSD</text>
+<text x="0" y="197" font-size="12" font-family="sans-serif">2026-10-10</text>
+<rect x="180" y="184" width="206.2" height="18" fill="#0f6e6b"></rect>
+<text x="392.2" y="197" font-size="12" font-family="sans-serif">2316125 µUSD</text>
+<text x="0" y="223" font-size="12" font-family="sans-serif">2026-10-11</text>
+<rect x="180" y="210" width="202.5" height="18" fill="#0f6e6b"></rect>
+<text x="388.5" y="223" font-size="12" font-family="sans-serif">2275100 µUSD</text>
+<text x="0" y="249" font-size="12" font-family="sans-serif">2026-10-12</text>
+<rect x="180" y="236" width="206.1" height="18" fill="#0f6e6b"></rect>
+<text x="392.1" y="249" font-size="12" font-family="sans-serif">2315425 µUSD</text>
+<text x="0" y="275" font-size="12" font-family="sans-serif">2026-10-13</text>
+<rect x="180" y="262" width="203.5" height="18" fill="#0f6e6b"></rect>
+<text x="389.5" y="275" font-size="12" font-family="sans-serif">2286440 µUSD</text>
+<text x="0" y="301" font-size="12" font-family="sans-serif">2026-10-14</text>
+<rect x="180" y="288" width="202.0" height="18" fill="#0f6e6b"></rect>
+<text x="388.0" y="301" font-size="12" font-family="sans-serif">2269840 µUSD</text>
+<text x="0" y="327" font-size="12" font-family="sans-serif">2026-10-15</text>
+<rect x="180" y="314" width="460.0" height="18" fill="#0f6e6b"></rect>
+<text x="646.0" y="327" font-size="12" font-family="sans-serif">5167790 µUSD</text>
+<text x="0" y="353" font-size="12" font-family="sans-serif">2026-10-16</text>
+<rect x="180" y="340" width="200.3" height="18" fill="#0f6e6b"></rect>
+<text x="386.3" y="353" font-size="12" font-family="sans-serif">2250745 µUSD</text>
+<text x="0" y="379" font-size="12" font-family="sans-serif">2026-10-17</text>
+<rect x="180" y="366" width="203.2" height="18" fill="#0f6e6b"></rect>
+<text x="389.2" y="379" font-size="12" font-family="sans-serif">2282515 µUSD</text>
+</svg>
+</body>
+</html>
