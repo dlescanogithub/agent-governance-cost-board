@@ -32,6 +32,11 @@ python3 -m governance_board report \
   --source simulated-generator
 ```
 
-Git commits for the artifacts are recorded after those files land. Regenerating the board needs this stamp updated in the same change.
+Git commits:
+
+- `traces/fleet.jsonl` and `traces/fleet.meta.json` (unchanged in the review): `e54858f7621d9d438eea380cd4c90173abc6fb5f`
+- `docs/example-board/index.html`, `report.md`, and `summary.json`, regenerated with `--source simulated-generator`: `c3201af7345b24152264015f3b90b2b0b57de95c`
+
+This stamp file is a later commit. Regenerating the board needs this stamp updated.
 
 Do not hand-edit the HTML. A test compares `traces/fleet.jsonl` to a fresh generator run.
