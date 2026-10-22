@@ -34,6 +34,18 @@ Acá la planilla es `inventory/fleet.yaml`. El medidor es el agregador de trazas
 
 9. **Incidente de costo.** El runbook corta el agente (`kill-switch`) y vuelve el prompt a una versión anterior (`rollback`). El pico del ejemplo está plantado para poder practicar ese recorrido.
 
+## Qué está medido
+
+El 2026-10-22, con Python 3.12.3, pytest 9.1.1, coverage 7.17.0 y el paquete 0.1.0, el comando fue:
+
+`python3 -m pytest --cov=governance_board --cov-report=term-missing --cov-fail-under=80`
+
+Pasaron 29 tests. pytest-cov imprimió cobertura total 90.09 por ciento. El proyecto mide ramas, así que ese total mezcla sentencias y ramas. En el JSON de la misma corrida, la cobertura de sentencias (la de líneas) fue 93.158953722334 por ciento: 1389 de 1491. La de ramas fue 79.82062780269058 por ciento: 356 de 446. El proceso avisó que el módulo ya estaba importado y no se midió de nuevo. Los porcentajes son los que coverage escribió igual. El registro del 2026-10-17 decía los mismos 29 y el mismo 90.09 por ciento, sin separar las sentencias.
+
+El mismo día, con `--today 2026-10-17`: la política del fleet salió 0 con cero violaciones; `inventory/violating.yaml` salió 1 con cinco violaciones; `eval` salió 0 (3 casos y 32 pruebas de propiedad, cero brechas); `eval-regression` salió 1 con tres brechas en un evento. El escaneo de secretos no encontró nada. Una corrida cada uno. El tablero de ejemplo no se regeneró ese día: sigue siendo el archivo simulado del 2026-10-17.
+
+El plan de valor está en `docs/BUSINESS_VALUE.md`. Repite el modelo [EST] de `docs/BUSINESS_CASE.md`. No agrega otro número de plata.
+
 ## Glosario
 
 | Palabra | Qué es acá |

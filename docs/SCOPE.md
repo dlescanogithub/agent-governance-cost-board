@@ -14,7 +14,7 @@ No fees. No statement of work. Harborline Cooperative is fictional.
 
 Exit criteria for phase 0:
 
-- `python3 -m pytest` meets the 80% coverage floor. Measured 2026-10-17 with that command (pytest 9.1.1, Python 3.12.3): 29 passed, total coverage 90.09%.
+- `python3 -m pytest` meets the 80% coverage floor. Measured 2026-10-17 with that command (pytest 9.1.1, Python 3.12.3): 29 passed, total coverage 90.09%. Re-measured 2026-10-22 with `python3 -m pytest --cov=governance_board --cov-report=term-missing --cov-fail-under=80` (pytest 9.1.1, coverage 7.17.0, Python 3.12.3): 29 passed, total coverage 90.09%, statement coverage 93.158953722334% (1389 of 1491). The printed total mixes statements and branches. Detail: `docs/METRICS.md`.
 - Fleet policy exits 0 for `--today 2026-10-17`.
 - Violating inventory exits non-zero.
 - `python3 -m governance_board eval` exits 0.

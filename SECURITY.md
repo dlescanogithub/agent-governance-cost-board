@@ -11,7 +11,7 @@ Open a private GitHub issue on this repository, or contact the owner through Git
 - Configuration is environment variables. See `.env.example`. The program does not load a `.env` file.
 - Do not commit `.env`, keys, or tokens.
 - CI runs `python3 -m governance_board secretscan`.
-- The scan looks for common token shapes. It is not a guarantee.
+- A local run of that command on 2026-10-22 reported zero findings. One run. The scan looks for common token shapes. It is not a guarantee.
 - The optional real provider is off unless `GOVERNANCE_REAL_PROVIDER_ENABLED=1` and a URL is set. CI does not enable it. Tests block outbound socket connects.
 
 ## What the checks cover
