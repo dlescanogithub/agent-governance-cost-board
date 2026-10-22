@@ -15,6 +15,19 @@ Package 0.1.0. Python 3.12.3.
 | Pytest | `python3 -m pytest` (pytest 9.1.1, Python 3.12.3, 2026-10-17) | 29 passed, total coverage 90.09% |
 | Coverage floor | `pytest` `--cov-fail-under` | 80% |
 
+## Pytest re-measured (2026-10-22)
+
+Same package 0.1.0. Python 3.12.3. pytest 9.1.1. coverage 7.17.0. Command `python3 -m pytest --cov=governance_board --cov-report=term-missing --cov-fail-under=80`. Branch measurement is on in `pyproject.toml`, so the printed total is not line coverage alone.
+
+| Figure | Value |
+| --- | --- |
+| Tests | 29 passed |
+| Total coverage pytest-cov printed | 90.09% (`percent_covered` 90.08776458440887) |
+| Statement (line) coverage | 93.158953722334% (1389 of 1491 statements) |
+| Branch coverage | 79.82062780269058% (356 of 446) |
+
+The run printed `CoverageWarning: Module governance_board was previously imported, but not measured`. The percentages are the totals coverage wrote anyway. The 2026-10-17 row above did not publish the statement split. The same day, fleet policy exited 0 with zero violations, the violating inventory exited 1 with five violations, eval exited 0, eval-regression exited 1 with three breaches, and the secret scan reported zero findings. The illustrative board was not regenerated.
+
 ## Illustrative board (simulated, not a measurement)
 
 Command and label: `docs/example-board/EXAMPLE.md`. The spike is planted in `traces/generation.yaml`.
