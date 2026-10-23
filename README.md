@@ -8,6 +8,8 @@ One command, after `python3 -m pip install -e ".[dev]"`: `python3 -m governance_
 
 Walkthrough: [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md). Value plan: [docs/BUSINESS_VALUE.md](docs/BUSINESS_VALUE.md).
 
+- **Demo video (English, offline):** [docs/demo/README.md](docs/demo/README.md) — [`agent_governance_cost_board_demo_en.mp4`](docs/demo/agent_governance_cost_board_demo_en.mp4)
+
 Policy checks, invariant evals, and a static cost board for a **simulated** fleet of 12 agents at the fictional Harborline Cooperative. The suite tests inventory rules, effect gates, and budget math. It does not test answer quality, and it does not call a model vendor.
 
 ## Problem
@@ -289,6 +291,7 @@ Configuration is environment variables only. `.env.example` is a template. `.env
 
 | Doc | What it is |
 | --- | --- |
+| [docs/demo/README.md](docs/demo/README.md) | Demo video (English, offline): [`agent_governance_cost_board_demo_en.mp4`](docs/demo/agent_governance_cost_board_demo_en.mp4) |
 | [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) | Walkthrough for engineers and buyers |
 | [docs/architecture.md](docs/architecture.md) | Components and trace schema |
 | [docs/TRACE_INGEST.md](docs/TRACE_INGEST.md) | Generator schema, runtime-evals mapping, sample |

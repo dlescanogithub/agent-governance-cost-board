@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add narrated English demo video (`agent_governance_cost_board_demo_en.mp4`) with subtitles and evidence pack under `docs/demo/`.
+
 ## 0.1.1 - 2026-10-22
 
 - Removed the sentence that said this repository is private. Vulnerability reports go through GitHub private vulnerability reporting: open the Security tab and choose "Report a vulnerability".
