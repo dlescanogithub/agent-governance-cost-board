@@ -1,9 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.1.1 - 2026-10-22
 
 - Removed the sentence that said this repository is private. Vulnerability reports go through GitHub private vulnerability reporting: open the Security tab and choose "Report a vulnerability".
 - Translated `docs/HOW_IT_WORKS.md` from Spanish into English and removed the interview-prep framing. It is a walkthrough for engineers and buyers. The README docs index matches.
+- Bumped the package version from 0.1.0 to 0.1.1 in `pyproject.toml` and `governance_board.__version__`.
+- The 2026-10-22 pytest, policy, eval, and secret-scan figures stay the measurements recorded on package 0.1.0. Those commands do not read the walkthrough text.
 
 ## 0.1.0 — 2026-10-17
 

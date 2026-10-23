@@ -44,6 +44,8 @@ On 2026-10-22, with Python 3.12.3, pytest 9.1.1, coverage 7.17.0, and package 0.
 
 The same day, with `--today 2026-10-17`: fleet policy exited 0 with zero violations; `inventory/violating.yaml` exited 1 with five violations; `eval` exited 0 (3 cases and 32 property trials, zero breaches); `eval-regression` exited 1 with three breaches on one event. The secret scan found nothing. One run each. The example board was not regenerated that day: it is still the simulated file from 2026-10-17.
 
+These figures were measured on package 0.1.0. The walkthrough text was not an input to those commands.
+
 The value plan is in `docs/BUSINESS_VALUE.md`. It repeats the [EST] model from `docs/BUSINESS_CASE.md`. It does not add another dollar figure.
 
 ## Glossary
