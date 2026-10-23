@@ -1,70 +1,72 @@
-# Cómo funciona
+# How it works
 
-Esto es para contarlo en una entrevista, en castellano rioplatense. Los datos son simulados. La empresa Harborline Cooperative es ficticia.
+Walkthrough for engineers and buyers. The data is simulated. Harborline Cooperative is fictional.
 
-## Para qué sirve
+## What it is for
 
-Mirá: el modelo razona, pero la confianza sale del sistema de alrededor. Este repo es ese sistema, en chico. Tiene un inventario de 12 agentes, reglas que corren en CI, trazas JSONL sintéticas y un tablero HTML estático de costo y latencia.
+The model reasons, but trust comes from the system around it. This repo is that system, at a small scale. It has an inventory of 12 agents, rules that run in CI, synthetic JSONL traces, and a static HTML board of cost and latency.
 
-No atiende a nadie. No llama a un proveedor pago. Si lo corrés en tu máquina, el costo es cero.
+It does not serve anyone. It does not call a paid provider. Run it on your machine and the cost is zero.
 
-## Analogía
+## Analogy
 
-Fijate en el encargado de un edificio. No vive en cada departamento. Tiene una planilla: quién es el responsable, quién lo cubre, y qué departamentos necesitan que alguien firme antes de tocar la llave de gas. Tiene un medidor. Si el medidor se dispara, no se pone a discutir con el caño: cierra la llave y anota qué versión de la canilla estaba puesta.
+Picture a building superintendent. They do not live in each apartment. They keep a sheet: who is responsible, who covers them, and which apartments need a signature before anyone touches the gas valve. They have a meter. If the meter spikes, they do not argue with the pipe. They close the valve and write down which faucet version was installed.
 
-Acá la planilla es `inventory/fleet.yaml`. El medidor es el agregador de trazas. La llave es el kill switch. La versión de la canilla es el registro de prompts.
+Here the sheet is `inventory/fleet.yaml`. The meter is the trace aggregator. The valve is the kill switch. The faucet version is the prompt registry.
 
-## Paso a paso
+## Step by step
 
-1. **Inventario.** Cada agente tiene id, dueño, dueño de respaldo, versión, modelo simulado, propósito, clases de datos, tier (bajo, medio, alto), compuertas de aprobación, topes de presupuesto, SLO y fecha de última revisión. El esquema JSON rechaza un archivo mal formado.
+1. **Inventory.** Each agent has an id, owner, backup owner, version, simulated model, purpose, data classes, tier (low, medium, high), approval gates, budget caps, an SLO, and a last-review date. The JSON schema rejects a malformed file.
 
-2. **Política.** `python3 -m governance_board policy` lee el inventario y el registro de prompts. Un agente de tier alto sin compuerta humana, o sin dueño de respaldo distinto, falla. Un tope por corrida más grande que el tope diario falla. Una revisión más vieja que N días falla. La fecha de "hoy" se inyecta (`--today` o `GOVERNANCE_TODAY`) para que el chequeo sea reproducible.
+2. **Policy.** `python3 -m governance_board policy` reads the inventory and the prompt registry. A high-tier agent with no human gate, or with no distinct backup owner, fails. A per-run cap larger than the daily cap fails. A review older than N days fails. "Today" is injected (`--today` or `GOVERNANCE_TODAY`) so the check is reproducible.
 
-3. **Fixture que tiene que fallar.** `inventory/violating.yaml` es válido para el esquema y inválido para la política. CI exige que ese comando salga con código distinto de cero.
+3. **Fixture that must fail.** `inventory/violating.yaml` is valid for the schema and invalid for the policy. CI requires that command to exit with a code other than zero.
 
-4. **Trazas simuladas.** El generador usa una semilla fija y escribe JSONL: corrida, agente, versión, tiempo, estado, tokens, costo en micro-USD, latencia, aprobación y efectos. Los números salen de un rate card simulado, no de un proveedor. El pico de `refund-advisor` está plantado en `traces/generation.yaml` (`token_multiplier`). Es un ejemplo ilustrativo para mostrar el tope. No es una medición.
+4. **Simulated traces.** The generator uses a fixed seed and writes JSONL: run, agent, version, time, status, tokens, cost in micro-USD, latency, approval, and effects. The numbers come from a simulated rate card, not from a provider. The `refund-advisor` spike is planted in `traces/generation.yaml` (`token_multiplier`). It is an illustrative example of the cap. It is not a measurement.
 
-5. **Ingesta.** El tablero también lee un JSONL con el esquema de runtime-evals: `run_id`, `step`, tokens de entrada y salida, costo en micro-USD, latencia y `outcome`. El mapeo está en `docs/TRACE_INGEST.md`. La muestra en `traces/samples/` está escrita a mano y dice SAMPLE. El encabezado del HTML dice si los números salen del generador o de ese archivo.
+5. **Ingest.** The board also reads a JSONL file in the runtime-evals shape: `run_id`, `step`, input and output tokens, cost in micro-USD, latency, and `outcome`. The mapping is in `docs/TRACE_INGEST.md`. The sample in `traces/samples/` is hand-written and says SAMPLE. The HTML header says whether the numbers come from the generator or from that file.
 
-6. **Agregador.** Por agente calcula costo, latencia p50/p95, tasa de aprobación humana, tasa de rechazo y quema del tope diario. Si un día se pasa del tope, o si la p95 se pasa del SLO, deja una alerta.
+6. **Aggregator.** For each agent it computes cost, p50/p95 latency, the human approval rate, the rejection rate, and burn of the daily cap. If a day goes over the cap, or if p95 goes over the SLO, it leaves an alert.
 
-7. **Tablero.** Un HTML con CSS y gráficos SVG adentro, más un Markdown. No hay CDN ni red. El encabezado nombra la fuente.
+7. **Board.** One HTML file with CSS and SVG charts inside, plus a Markdown file. There is no CDN and no network. The header names the source.
 
-8. **Evals.** No miran la secuencia exacta de herramientas. Miran invariantes: ningún efecto dañino, costo dentro del tope, ningún efecto externo sin `approval: approved`. Además, `eval` corre propiedades con semilla: un costo por encima del tope siempre se marca, el kill switch enganchado siempre bloquea, el rollback vuelve a la versión anterior del prompt, y un agente sin dueño o sin tier no pasa la política. `eval-regression` corre un caso malo y **tiene que fallar**. CI comprueba esa falla.
+8. **Evals.** They do not look at the exact tool sequence. They look at invariants: no harmful effect, cost within the cap, no external effect without `approval: approved`. `eval` also runs seeded properties: a cost above the cap is always flagged, an engaged kill switch always blocks, rollback returns to the previous prompt version, and an agent with no owner or no tier fails policy. `eval-regression` runs a bad case and **must fail**. CI checks that failure.
 
-9. **Incidente de costo.** El runbook corta el agente (`kill-switch`) y vuelve el prompt a una versión anterior (`rollback`). El pico del ejemplo está plantado para poder practicar ese recorrido.
+9. **Cost incident.** The runbook stops the agent (`kill-switch`) and returns the prompt to a previous version (`rollback`). The example spike is planted so that path can be practiced.
 
-## Qué está medido
+## What was measured
 
-El 2026-10-22, con Python 3.12.3, pytest 9.1.1, coverage 7.17.0 y el paquete 0.1.0, el comando fue:
+On 2026-10-22, with Python 3.12.3, pytest 9.1.1, coverage 7.17.0, and package 0.1.0, the command was:
 
 `python3 -m pytest --cov=governance_board --cov-report=term-missing --cov-fail-under=80`
 
-Pasaron 29 tests. pytest-cov imprimió cobertura total 90.09 por ciento. El proyecto mide ramas, así que ese total mezcla sentencias y ramas. En el JSON de la misma corrida, la cobertura de sentencias (la de líneas) fue 93.158953722334 por ciento: 1389 de 1491. La de ramas fue 79.82062780269058 por ciento: 356 de 446. El proceso avisó que el módulo ya estaba importado y no se midió de nuevo. Los porcentajes son los que coverage escribió igual. El registro del 2026-10-17 decía los mismos 29 y el mismo 90.09 por ciento, sin separar las sentencias.
+29 tests passed. pytest-cov printed total coverage of 90.09 percent. The project measures branches, so that total mixes statements and branches. In the JSON from the same run, statement coverage (line coverage) was 93.158953722334 percent: 1389 of 1491. Branch coverage was 79.82062780269058 percent: 356 of 446. The process warned that the module was already imported and was not measured again. The percentages are the ones coverage wrote anyway. The 2026-10-17 record reported the same 29 tests and the same 90.09 percent, without a statement split.
 
-El mismo día, con `--today 2026-10-17`: la política del fleet salió 0 con cero violaciones; `inventory/violating.yaml` salió 1 con cinco violaciones; `eval` salió 0 (3 casos y 32 pruebas de propiedad, cero brechas); `eval-regression` salió 1 con tres brechas en un evento. El escaneo de secretos no encontró nada. Una corrida cada uno. El tablero de ejemplo no se regeneró ese día: sigue siendo el archivo simulado del 2026-10-17.
+The same day, with `--today 2026-10-17`: fleet policy exited 0 with zero violations; `inventory/violating.yaml` exited 1 with five violations; `eval` exited 0 (3 cases and 32 property trials, zero breaches); `eval-regression` exited 1 with three breaches on one event. The secret scan found nothing. One run of each. The example board was not regenerated that day. It is still the simulated file from 2026-10-17.
 
-El plan de valor está en `docs/BUSINESS_VALUE.md`. Repite el modelo [EST] de `docs/BUSINESS_CASE.md`. No agrega otro número de plata.
+These figures were measured on package 0.1.0. The walkthrough text was not an input to those commands.
 
-## Glosario
+The value plan is in `docs/BUSINESS_VALUE.md`. It repeats the [EST] model in `docs/BUSINESS_CASE.md`. It does not add another dollar figure.
 
-| Palabra | Qué es acá |
+## Glossary
+
+| Word | What it means here |
 | --- | --- |
-| Tier | Rubro interno: bajo, medio o alto. No es una categoría legal. |
-| Compuerta | Un humano tiene que aprobar antes de un efecto que sale del sistema. |
-| Efecto | Algo que la corrida dice que hizo, por ejemplo escribir una nota de libro mayor. |
-| micro-USD | Millonésima de dólar. 1,000,000 micro-USD = 1 USD en esta convención. |
-| SLO | Objetivo de p95 de latencia y de costo por corrida. En este repo los números de SLO son [EST] y los de latencia son simulados. |
-| Kill switch | Campo del inventario. Enganchado significa `status: disabled`. |
-| Casete | Respuesta grabada de un proveedor falso. Sirve para no ir a la red. |
+| Tier | Internal band: low, medium, or high. Not a legal category. |
+| Gate | A human has to approve before an effect that leaves the system. |
+| Effect | Something the run says it did, for example writing a ledger note. |
+| micro-USD | One millionth of a dollar. 1,000,000 micro-USD = 1 USD in this convention. |
+| SLO | Target for latency p95 and for cost per run. In this repo the SLO numbers are [EST] and the latency numbers are simulated. |
+| Kill switch | Inventory field. Engaged means `status: disabled`. |
+| Cassette | A recorded reply from a fake provider. It keeps the run off the network. |
 
-## Límites honestos
+## Honest limits
 
-- No certifica nada. El mapa a NIST y a la ley de IA de la UE es material de estudio. Mirá `docs/RISKS.md`.
-- No puntúa si la respuesta está bien. Chequea gates. El costo y la latencia del ejemplo son simulados.
-- No pagina a nadie. La alerta queda en el HTML.
-- No hay usuarios ni permisos.
-- El generador no es tráfico real. Si cambiás la semilla, cambian los números.
-- Reescribir el YAML con el kill switch o el rollback puede perder comentarios.
+- It certifies nothing. The map to NIST and to the EU AI Act is study material. See `docs/RISKS.md`.
+- It does not score whether an answer is good. It checks gates. Cost and latency in the example are simulated.
+- It does not page anyone. The alert stays in the HTML.
+- There are no users and no permissions.
+- The generator is not real traffic. Change the seed and the numbers change.
+- Rewriting the YAML with the kill switch or with rollback can drop comments.
 
-Si te preguntan "¿esto corrió en producción?", la respuesta es no. Corrió en esta repo, con datos sintéticos, y el comando está en el README.
+This did not run in production. It ran in this repo, on synthetic data, and the command is in the README.

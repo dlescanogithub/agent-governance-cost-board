@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1 - 2026-10-22
+
+- Translated `docs/HOW_IT_WORKS.md` into English. Removed the interview framing. The page is a walkthrough for engineers and buyers.
+- README docs table now describes that walkthrough in English.
+- Bumped the package version from 0.1.0 to 0.1.1 in `pyproject.toml` and `governance_board.__version__`.
+- The 2026-10-22 pytest, policy, eval, and secret-scan figures stay the measurements recorded on package 0.1.0. Those commands do not read the walkthrough text.
+
 ## 0.1.0 — 2026-10-17
 
 - Inventory YAML with JSON Schema validation for a synthetic 12-agent fleet.
