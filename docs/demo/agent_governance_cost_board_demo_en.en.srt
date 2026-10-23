@@ -1,0 +1,45 @@
+1
+00:00:00,880 --> 00:00:05,310
+Twelve simulated agents at Harborline Cooperative, a fictional co-op.
+
+2
+00:00:05,340 --> 00:00:11,410
+Policy as code, a cost board, and a gate that can go red. Offline. No model
+call.
+
+3
+00:00:12,680 --> 00:00:20,810
+Fleet policy on inventory and prompts, dated October seventeenth twenty
+twenty-six: pass, twelve agents, zero violations.
+
+4
+00:00:20,850 --> 00:00:26,720
+The demo also writes a static board from two thousand sixteen simulated events
+and three planted alerts.
+
+5
+00:00:28,010 --> 00:00:34,330
+Invariant eval: three YAML cases, thirty-two property trials, zero breaches.
+
+6
+00:00:35,620 --> 00:00:44,280
+Forced regression on a bad refund event: three breaches, exit one. Harmful
+transfer, cost over cap, and an unapproved external write.
+
+7
+00:00:44,310 --> 00:00:46,980
+That red exit is the proof the gate can fail.
+
+8
+00:00:48,220 --> 00:00:53,000
+Use it to keep owners, caps, and human gates in YAML and in C-I.
+
+9
+00:00:53,030 --> 00:00:59,910
+Not covered: answer quality, a live vendor call, or a real spend finding.
+Board numbers are simulated.
+
+10
+00:00:59,980 --> 00:01:06,920
+Run python -m governance_board demo after install. Cost of the lab path: zero.
+

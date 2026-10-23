@@ -1,0 +1,22 @@
+[
+ {
+  "id": "A_hook",
+  "text": "Twelve simulated agents at Harborline Cooperative, a fictional co-op. Policy as code, a cost board, and a gate that can go red. Offline. No model call."
+ },
+ {
+  "id": "B_policy",
+  "text": "Fleet policy on inventory and prompts, dated October seventeenth twenty twenty-six: pass, twelve agents, zero violations. The demo also writes a static board from two thousand sixteen simulated events and three planted alerts."
+ },
+ {
+  "id": "C_eval",
+  "text": "Invariant eval: three YAML cases, thirty-two property trials, zero breaches."
+ },
+ {
+  "id": "D_regress",
+  "text": "Forced regression on a bad refund event: three breaches, exit one. Harmful transfer, cost over cap, and an unapproved external write. That red exit is the proof the gate can fail."
+ },
+ {
+  "id": "E_close",
+  "text": "Use it to keep owners, caps, and human gates in YAML and in C-I. Not covered: answer quality, a live vendor call, or a real spend finding. Board numbers are simulated. Run python -m governance_board demo after install. Cost of the lab path: zero."
+ }
+]
