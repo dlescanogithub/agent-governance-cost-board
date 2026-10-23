@@ -289,7 +289,7 @@ Configuration is environment variables only. `.env.example` is a template. `.env
 
 | Doc | What it is |
 | --- | --- |
-| [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) | Walkthrough in rioplatense Spanish |
+| [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) | Walkthrough for engineers and buyers |
 | [docs/architecture.md](docs/architecture.md) | Components and trace schema |
 | [docs/TRACE_INGEST.md](docs/TRACE_INGEST.md) | Generator schema, runtime-evals mapping, sample |
 | [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md) | ROI model [EST] |

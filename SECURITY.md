@@ -1,10 +1,10 @@
 # Security
 
-This is a portfolio repo of synthetic governance checks. It is private until the owner publishes it.
+This is a portfolio repo of synthetic governance checks.
 
 ## Reporting
 
-Open a private GitHub issue on this repository, or contact the owner through GitHub (`dlescanogithub`). Do not include live credentials, customer data, or a real inventory in the report.
+Report security issues through GitHub private vulnerability reporting. Open the Security tab on this repository and choose "Report a vulnerability". Do not include live credentials, customer data, or a real inventory in the report.
 
 ## Secrets
 
