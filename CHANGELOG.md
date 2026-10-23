@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Removed the sentence that said this repository is private. Vulnerability reports go through GitHub private vulnerability reporting: open the Security tab and choose "Report a vulnerability".
+- Translated `docs/HOW_IT_WORKS.md` from Spanish into English and removed the interview-prep framing. It is a walkthrough for engineers and buyers. The README docs index matches.
+
 ## 0.1.0 — 2026-10-17
 
 - Inventory YAML with JSON Schema validation for a synthetic 12-agent fleet.
